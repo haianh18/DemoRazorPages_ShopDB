@@ -1,0 +1,65 @@
+﻿@page
+@model DemoRazorPages_ShopDB.Pages.Orders.DetailsModel
+
+@{
+    Layout = null;
+}
+
+@{
+    ViewBag.Title = "Order Detail";
+}
+
+<h2>Order Detail</h2>
+
+<table border="1">
+    <tr>
+        <th>Order ID</th>
+        <td>@Model.Order.OrderId</td>
+    </tr>
+    <tr>
+        <th>Customer</th>
+        <td>@Model.Order.Customer?.CustomerName</td>
+    </tr>
+    <tr>
+        <th>Employee</th>
+        <td>@Model.Order.Employee?.EmployeeName</td>
+    </tr>
+    <tr>
+        <th>Order Date</th>
+        <td>@Model.Order.OrderDate.ToString()</td>
+    </tr>
+    
+</table>
+
+<h3>Products in this Order</h3>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (@Model.Order != null)
+        {
+            @foreach (var detail in @Model.Order.OrderDetails)
+            {
+                <tr>
+                    <td>@detail.ProductId</td>
+                    <td>@detail.Product?.ProductName</td>
+                    <td>@detail.Product?.Price</td>
+                    <td>@detail.Quantity</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">No products available for this order.</td>
+            </tr>
+        }
+    </tbody>
+</table>

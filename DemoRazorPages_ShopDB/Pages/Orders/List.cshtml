@@ -1,0 +1,114 @@
+﻿@page
+@using DemoRazorPages_ShopDB.Models
+@model DemoRazorPages_ShopDB.Pages.Orders.ListModel
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<div style="display: flex;">
+<div style="flex: 1; padding-right: 20px; margin-left: 20px">
+        <form method="get">
+            <h1>Filter Info</h1>
+            <div>
+                <p>Employee</p>
+                <select name="employeeid">
+                    <option value="0">All Employees</option>
+                    @if (Model.Employees != null)
+                    {
+                        @foreach (Employee employee in Model.Employees)
+                        {
+                            <option value="@employee.EmployeeId" selected="@(employee.EmployeeId == Model.Filter.EmployeeId)">
+                                @employee.EmployeeName
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div>
+                <p>Customer</p>
+                <select name="customerid">
+                    <option value="">All Customers</option>
+                    @if (Model.Customers != null)
+                    {
+                        @foreach (Customer customer in Model.Customers)
+                        {
+                            <option value="@customer.CustomerId" selected="@(customer.CustomerId == Model.Filter.CustomerId)">
+                                @customer.CustomerName
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div>
+                <p>Product</p>
+                <select name="productid">
+                    <option value="">All Products</option>
+                    @if (Model.Products != null && Model.Filter != null)
+                    {
+                        @foreach (Product product in Model.Products)
+                        {
+                            <option value="@product.ProductId" selected="@(product.ProductId == Model.Filter.ProductId)">
+                                @product.ProductName
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div>
+                <p>OrderDate</p>
+                <div>
+                    From <input type="date" name="fromdate" value="@Model.Filter.FromDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div>
+                    To <input type="date" name="todate" value="@Model.Filter.ToDate?.ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+            <div>
+                <input type="submit" value="Filter" />
+            </div>
+        </form>
+    </div>
+
+    <div style="flex: 3;">
+        @if (Model != null)
+        {
+            <h1>List of orders</h1>
+            <table border="1">
+                <tr>
+                    <th>OrderId</th>
+                    <th>Customer</th>
+                    <th>Employee</th>
+                    <th>OrderDate</th>
+                    <th>Action</th>
+                    <th>Action</th>
+                </tr>
+                @if (Model.Orders != null)
+                {
+                    @foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>@order.OrderId</td>
+                            <td>@order.Customer?.CustomerName</td>
+                            <td>@order.Employee?.EmployeeName</td>
+                            <td>@order.OrderDate</td>
+                            <td><a asp-page="./Details" asp-route-id="@order.OrderId">Details</a></td>
+                            <td>
+                                <form method="post" asp-page="./List" asp-page-handler="Delete" onsubmit="return confirm('are you sure you want to delete this order?');">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <input type="hidden" name="employeeid" value="@Model.Filter.EmployeeId" />
+                                    <input type="hidden" name="customerid" value="@Model.Filter.CustomerId" />
+                                    <input type="hidden" name="productid" value="@Model.Filter.ProductId" />
+                                    <input type="hidden" name="fromdate" value="@Model.Filter.FromDate?.ToString("yyyy-MM-dd")" />
+                                    <input type="hidden" name="todate" value="@Model.Filter.ToDate?.ToString("yyyy-MM-dd")" />
+                                    <input type="submit" value="Delete" class="btn btn-danger" />
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        }
+    </div>
+</div>

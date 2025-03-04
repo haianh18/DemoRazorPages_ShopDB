@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\DemoRazorPages_ShopDB.props" />
+</Project>
