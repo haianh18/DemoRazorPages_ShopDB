@@ -291,3 +291,4 @@ D:\FPT\PRN222\DemoRazorPages_ShopDB\DemoRazorPages_ShopDB\bin\Debug\net8.0\runti
 D:\FPT\PRN222\DemoRazorPages_ShopDB\DemoRazorPages_ShopDB\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
 D:\FPT\PRN222\DemoRazorPages_ShopDB\DemoRazorPages_ShopDB\bin\Debug\net8.0\bundleconfig.json
 D:\FPT\PRN222\DemoRazorPages_ShopDB\DemoRazorPages_ShopDB\bin\Debug\net8.0\DemoRazorPages_ShopDB.staticwebassets.runtime.json
+D:\FPT\PRN222\DemoRazorPages_ShopDB\DemoRazorPages_ShopDB\obj\Debug\net8.0\DemoRazorPages_ShopDB.sourcelink.json

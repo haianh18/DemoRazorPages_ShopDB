@@ -1,0 +1,87 @@
+﻿@model DemoRazorPages_ShopDB.Pages.Shared.PaginationModel<DemoRazorPages_ShopDB.Models.Order>
+
+<nav aria-label="Page navigation" class="pagination-container">
+    @if (Model.PageIndex > 1)
+    {
+        <div class="page-item">
+            <a class="page-link" asp-route-pageIndex="1">First Page</a>
+        </div>
+    }
+    @if (Model.HasPreviousPage)
+    {
+        <div class="page-item">
+            <a class="page-link" asp-route-pageIndex="@(Model.PageIndex - 1)">Previous</a>
+        </div>
+    }
+
+    @if (Model.PageIndex > 6)
+    {
+        <div class="page-item">
+            <a class="page-link" asp-route-pageIndex="1">1</a>
+        </div>
+        <div class="page-item">
+            <span class="page-link">...</span>
+        </div>
+    }
+
+    @for (int i = Math.Max(1, Model.PageIndex - 5); i <= Math.Min(Model.TotalPages, Model.PageIndex + 5); i++)
+    {
+        <div class="page-item @(i == Model.PageIndex ? "active" : "")">
+            <a class="page-link" asp-route-pageIndex="@i">@i</a>
+        </div>
+    }
+
+    @if (Model.PageIndex + 5 < Model.TotalPages)
+    {
+        <div class="page-item">
+            <span class="page-link">...</span>
+        </div>
+        <div class="page-item">
+            <a class="page-link" asp-route-pageIndex="@(Model.TotalPages)">@Model.TotalPages</a>
+        </div>
+    }
+
+    @if (Model.HasNextPage)
+    {
+        <div class="page-item">
+            <a class="page-link" asp-route-pageIndex="@(Model.PageIndex + 1)">Next</a>
+        </div>
+    }
+    @if (Model.PageIndex < Model.TotalPages)
+    {
+        <div class="page-item">
+            <a class="page-link" asp-route-pageIndex="@(Model.TotalPages)">Last Page</a>
+        </div>
+    }
+</nav>
+
+<style>
+    .pagination-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .page-item {
+        margin: 0 5px;
+    }
+
+    .page-link {
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #007bff;
+    }
+
+    .page-item.active .page-link {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+
+    .page-link:hover {
+        background-color: #e9ecef;
+        border-color: #ddd;
+    }
+</style>

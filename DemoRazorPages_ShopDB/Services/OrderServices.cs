@@ -46,5 +46,10 @@ namespace DemoRazorPages_ShopDB.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<int> GetOrderCountAsync()
+        {
+            return await _context.Orders.CountAsync();
+        }
     }
 }

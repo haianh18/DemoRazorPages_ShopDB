@@ -1,4 +1,5 @@
 using DemoRazorPages_ShopDB.Models;
+using DemoRazorPages_ShopDB.Pages.Shared;
 using DemoRazorPages_ShopDB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -28,12 +29,30 @@ namespace DemoRazorPages_ShopDB.Pages.Orders
         public List<Customer>? Customers { get; set; }
         public List<Product>? Products { get; set; }
 
-        public async Task OnGetAsync()
+        public PaginationModel<Order> Pagination { get; set; }
+
+        public async Task OnGetAsync(int? pageIndex)
         {
             Employees = await _employeeServices.GetEmployeesAsync();
             Customers = await _customerServices.GetCustomersAsync();
             Products = await _productServices.GetAllProductsAsync();
             Orders = await _orderServices.GetAllOrderAsync(Filter);
+
+            if (Orders != null)
+            {
+                int pageSize = 10;
+                int currentPageIndex = pageIndex ?? 1;
+                int totalOrders = Orders.Count;
+
+                var orders = Orders.Skip((currentPageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+                Pagination = new PaginationModel<Order>
+                {
+                    PageIndex = currentPageIndex,
+                    TotalPages = (int)Math.Ceiling(totalOrders / (double)pageSize),
+                    Items = orders
+                };
+            }
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int orderId, int? employeeid, int? customerid, int? productid, DateTime? fromdate, DateTime? todate)
@@ -58,5 +77,6 @@ namespace DemoRazorPages_ShopDB.Pages.Orders
             //return RedirectToPage("List");
         }
     }
+
 }
 

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DemoRazorPages_ShopDB")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ef25eb45642a368f8d732f61992a3e6dddae9a7")]
 [assembly: System.Reflection.AssemblyProductAttribute("DemoRazorPages_ShopDB")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DemoRazorPages_ShopDB")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

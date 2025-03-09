@@ -44,6 +44,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT3JkZXJzXExpc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/FPT/PRN222/DemoRazorPages_ShopDB/DemoRazorPages_ShopDB/Pages/Shared/Pagination.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFBhZ2luYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FPT/PRN222/DemoRazorPages_ShopDB/DemoRazorPages_ShopDB/Pages/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0xheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

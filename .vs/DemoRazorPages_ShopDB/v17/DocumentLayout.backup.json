@@ -3,24 +3,12 @@
   "WorkspaceRootPath": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\orders\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\orders\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\shared\\pagination.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\shared\\pagination.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\orders\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\orders\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\orders\\list.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -31,32 +19,32 @@
       "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\orders\\list.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\orders\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\orders\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\orders\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\orders\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\shared\\pagination.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\shared\\pagination.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\services\\orderservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\services\\orderservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\orders\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\orders\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\pages\\orders\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\pages\\orders\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|solutionrelative:demorazorpages_shopdb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1881F306-C874-462F-9082-DF2BBD67B9E4}|DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB.csproj|d:\\fpt\\prn222\\demorazorpages_shopdb\\demorazorpages_shopdb\\services\\productservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -82,80 +70,45 @@
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 256,
+      "VerticalTabListWidth": 211,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 1,
           "Children": [
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\_Layout.cshtml",
-              "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\_Layout.cshtml",
-              "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\_Layout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-04T14:50:19.698Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "_ViewImports.cshtml",
-              "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\_ViewImports.cshtml",
-              "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\_ViewImports.cshtml",
-              "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\_ViewImports.cshtml",
-              "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\_ViewImports.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "Pagination.cshtml",
+              "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml",
+              "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml",
+              "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml",
+              "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAcwBoAAABnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-04T10:36:19.376Z",
+              "WhenOpened": "2025-03-09T12:22:58.457Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "_ValidationScriptsPartial.cshtml",
-              "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\_ValidationScriptsPartial.cshtml",
-              "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\_ValidationScriptsPartial.cshtml",
-              "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\_ValidationScriptsPartial.cshtml",
-              "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\_ValidationScriptsPartial.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-04T13:26:28.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml.cs",
-              "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml.cs",
-              "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "Pagination.cshtml.cs",
+              "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml.cs",
+              "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml.cs",
+              "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml.cs",
+              "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Shared\\Pagination.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T13:26:28.914Z",
+              "WhenOpened": "2025-03-09T11:14:54.89Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml",
-              "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml",
-              "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml",
-              "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Orders\\Index.cshtml",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAADAAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-04T13:26:28.839Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
               "Title": "OrderDetail.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Models\\OrderDetail.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Models\\OrderDetail.cs",
@@ -163,38 +116,37 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Models\\OrderDetail.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T11:59:19.793Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T11:59:19.793Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 1,
               "Title": "Order.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Models\\Order.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Models\\Order.cs",
               "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Models\\Order.cs",
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Models\\Order.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA5wAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-04T11:49:31.056Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "List.cshtml",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml",
               "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml",
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAAAGgAAABfAAAAAAAAAA==",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAcwHcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-03-04T11:46:52.933Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
               "Title": "Details.cshtml.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\Details.cshtml.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Orders\\Details.cshtml.cs",
@@ -202,25 +154,24 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Orders\\Details.cshtml.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAiwBwAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T11:35:41.851Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T11:35:41.851Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "Details.cshtml",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\Details.cshtml",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Orders\\Details.cshtml",
               "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\Details.cshtml",
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Orders\\Details.cshtml",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-03-04T11:35:34.479Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 12,
               "Title": "Customer.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Models\\Customer.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Models\\Customer.cs",
@@ -228,12 +179,11 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Models\\Customer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T11:24:47.704Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T11:24:47.704Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "ScaffoldingReadMe.txt",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\ScaffoldingReadMe.txt",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\ScaffoldingReadMe.txt",
@@ -241,25 +191,24 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\ScaffoldingReadMe.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-03-04T10:34:09.057Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T10:34:09.057Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "List.cshtml.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml.cs",
               "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml.cs",
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Pages\\Orders\\List.cshtml.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAADwvxcAAABBAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAswCoAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-04T10:14:26.713Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 10,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Program.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Program.cs",
@@ -267,25 +216,24 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Program.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAAwBsAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T10:11:32.899Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T10:11:32.899Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 5,
               "Title": "OrderServices.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Services\\OrderServices.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Services\\OrderServices.cs",
               "ToolTip": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Services\\OrderServices.cs",
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Services\\OrderServices.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAvwCQAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABwAAAAAAAAAAAAvwDMAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-04T10:03:06.178Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 15,
               "Title": "EmployeeServices.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Services\\EmployeeServices.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Services\\EmployeeServices.cs",
@@ -293,12 +241,11 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Services\\EmployeeServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T10:03:01.706Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T10:03:01.706Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 14,
               "Title": "CustomerServices.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Services\\CustomerServices.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Services\\CustomerServices.cs",
@@ -306,12 +253,11 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Services\\CustomerServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T10:02:54.161Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T10:02:54.161Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 13,
               "Title": "CategoryServices.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Services\\CategoryServices.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Services\\CategoryServices.cs",
@@ -319,12 +265,11 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Services\\CategoryServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T10:02:49.334Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T10:02:49.334Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 11,
               "Title": "ProductServices.cs",
               "DocumentMoniker": "D:\\FPT\\PRN222\\DemoRazorPages_ShopDB\\DemoRazorPages_ShopDB\\Services\\ProductServices.cs",
               "RelativeDocumentMoniker": "DemoRazorPages_ShopDB\\Services\\ProductServices.cs",
@@ -332,8 +277,7 @@
               "RelativeToolTip": "DemoRazorPages_ShopDB\\Services\\ProductServices.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAApwCMAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:59:24.075Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:59:24.075Z"
             }
           ]
         }
