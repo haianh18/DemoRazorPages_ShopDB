@@ -6,6 +6,22 @@
     ViewData["Title"] = "Product List";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div style="display: flex;">
     <div style="flex: 1; padding-right: 20px; margin-left: 20px">
         <form method="get">
@@ -42,6 +58,28 @@
                 <input type="submit" value="Filter" class="btn btn-primary" />
             </div>
         </form>
+
+        <div class="mt-3">
+            <h3>Select Cart to Add Products</h3>
+            <div class="d-flex align-items-center">
+                <form method="post" asp-page-handler="SelectCart" class="flex-grow-1 me-2">
+                    <select name="selectedCartId" class="form-select" onchange="this.form.submit()">
+                        <option value="">Create New Cart</option>
+                        @if (Model.Carts != null)
+                        {
+                            @foreach (var cart in Model.Carts)
+                            {
+                                <option value="@cart.CartId"
+                                        selected="@(Model.SelectedCartId == cart.CartId)">
+                                    Cart #@cart.CartId (Created: @cart.CreatedDate.ToString("dd/MM/yyyy"))
+                                </option>
+                            }
+                        }
+                    </select>
+                </form>
+                <a asp-page="/Carts/Index" class="btn btn-secondary">View Cart List</a>
+            </div>
+        </div>
     </div>
 
     <div style="flex: 3;">
@@ -61,6 +99,7 @@
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Actions</th>
+                            <th>Add to Cart</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,13 +128,21 @@
                                             </button>
                                         </form>
                                     </td>
+                                    <td>
+                                        <form method="post" asp-page-handler="AddToCart" class="d-flex align-items-center">
+                                            <input type="hidden" name="productId" value="@product.ProductId" />
+                                            <input type="number" name="quantity" value="1" min="1" max="@product.Quantity"
+                                                   class="form-control form-control-sm" style="width: 70px;" />
+                                            <button type="submit" class="btn btn-sm btn-success ms-2">Add</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             }
                         }
                         else
                         {
                             <tr>
-                                <td colspan="6" class="text-center">No products found matching your criteria.</td>
+                                <td colspan="7" class="text-center">No products found matching your criteria.</td>
                             </tr>
                         }
                     </tbody>

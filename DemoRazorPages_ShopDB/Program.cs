@@ -14,6 +14,7 @@ namespace DemoRazorPages_ShopDB
             builder.Services.AddScoped<Services.OrderServices>();
             builder.Services.AddScoped<Services.CategoryServices>();
             builder.Services.AddScoped<Services.ProductServices>();
+            builder.Services.AddScoped<Services.CartServices>();
 
             var app = builder.Build();
             app.UseHttpsRedirection();

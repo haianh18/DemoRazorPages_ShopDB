@@ -21,9 +21,6 @@ namespace DemoRazorPages_ShopDB.Pages.Orders
             _productServices = productServices;
         }
 
-        [BindProperty(SupportsGet = true)]
-        public OrderFilterModel Filter { get; set; } = new OrderFilterModel();
-
         public List<Order>? Orders { get; set; }
         public List<Employee>? Employees { get; set; }
         public List<Customer>? Customers { get; set; }
@@ -31,11 +28,19 @@ namespace DemoRazorPages_ShopDB.Pages.Orders
 
         public PaginationModel<Order> Pagination { get; set; }
 
-        public async Task OnGetAsync(int? pageIndex)
+        [BindProperty(SupportsGet = true)]
+        public OrderFilterModel Filter { get; set; } = new OrderFilterModel();
+
+        [BindProperty(SupportsGet = true)]
+        public int? pageIndex { get; set; }
+
+        public async Task OnGetAsync()
         {
+            // Sử dụng pageIndex thay vì truyền làm tham số
             Employees = await _employeeServices.GetEmployeesAsync();
             Customers = await _customerServices.GetCustomersAsync();
             Products = await _productServices.GetAllProductsAsync();
+
             Orders = await _orderServices.GetAllOrderAsync(Filter);
 
             if (Orders != null)
@@ -44,7 +49,10 @@ namespace DemoRazorPages_ShopDB.Pages.Orders
                 int currentPageIndex = pageIndex ?? 1;
                 int totalOrders = Orders.Count;
 
-                var orders = Orders.Skip((currentPageIndex - 1) * pageSize).Take(pageSize).ToList();
+                var orders = Orders
+                    .Skip((currentPageIndex - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
                 Pagination = new PaginationModel<Order>
                 {

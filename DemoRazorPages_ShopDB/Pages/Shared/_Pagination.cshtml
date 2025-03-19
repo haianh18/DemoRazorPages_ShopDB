@@ -1,4 +1,4 @@
-﻿// Pages/Shared/_Pagination.cshtml
+﻿@* // Pages/Shared/_Pagination.cshtml
 @model DemoRazorPages_ShopDB.Pages.Shared.PaginationModel<object>
 
 @{
@@ -81,6 +81,138 @@
     </div>
 </nav>
 
+<style>
+    .pagination-info {
+        margin: 10px 0;
+        color: #666;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+    }
+
+    .page-item {
+        margin: 0 3px;
+    }
+
+    .page-link {
+        text-decoration: none;
+        padding: 6px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #007bff;
+        background-color: #fff;
+        transition: all 0.2s ease;
+    }
+
+    .page-item.active .page-link {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+
+    .page-item.disabled .page-link {
+        color: #aaa;
+        cursor: not-allowed;
+        background-color: #f8f9fa;
+    }
+
+    .page-link:hover:not(.disabled) {
+        background-color: #e9ecef;
+        border-color: #ddd;
+    }
+
+    .ellipsis {
+        border: none;
+        background: transparent;
+        cursor: default;
+    }
+</style> *@
+
+@model object
+@{
+    dynamic paginationModel = Model;
+    int pageIndex = paginationModel.PageIndex;
+    int totalPages = paginationModel.TotalPages;
+    bool hasPreviousPage = pageIndex > 1;
+    bool hasNextPage = pageIndex < totalPages;
+    object filter = paginationModel.Filter;
+    // Lấy các query params từ Filter
+    var queryParams = new Dictionary<string, string>();
+
+    if (filter != null)
+    {
+        var properties = filter.GetType().GetProperties();
+        foreach (var prop in properties)
+        {
+            var value = prop.GetValue(filter);
+            if (value != null)
+            {
+                if (value is DateTime dateValue)
+                {
+                    queryParams[prop.Name.ToLower()] = dateValue.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    queryParams[prop.Name.ToLower()] = value.ToString();
+                }
+            }
+        }
+    }
+
+    // Calculate page range to display
+    int startPage = Math.Max(1, pageIndex - 2);
+    int endPage = Math.Min(totalPages, startPage + 4);
+
+    // Adjust start page if we're near the end to always show 5 pages if possible
+    if (endPage - startPage < 4 && startPage > 1)
+    {
+        startPage = Math.Max(1, endPage - 4);
+    }
+}
+<div class="pagination-info">
+    Showing page @pageIndex of @totalPages
+</div>
+<nav aria-label="Page navigation" class="pagination-container">
+    <div class="page-item @(pageIndex == 1 ? "disabled" : "")">
+        <a class="page-link" href="?pageIndex=1&@string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"))">First</a>
+    </div>
+    <div class="page-item @(!hasPreviousPage ? "disabled" : "")">
+        <a class="page-link" href="?pageIndex=@(pageIndex - 1)&@string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"))">Previous</a>
+    </div>
+
+    @if (startPage > 1)
+    {
+        <div class="page-item">
+            <span class="page-link ellipsis">...</span>
+        </div>
+    }
+
+    @for (int i = startPage; i <= endPage; i++)
+    {
+        <div class="page-item @(i == pageIndex ? "active" : "")">
+            <a class="page-link" href="?pageIndex=@i&@string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"))">@i</a>
+        </div>
+    }
+
+    @if (endPage < totalPages)
+    {
+        <div class="page-item">
+            <span class="page-link ellipsis">...</span>
+        </div>
+    }
+
+    <div class="page-item @(!hasNextPage ? "disabled" : "")">
+        <a class="page-link" href="?pageIndex=@(pageIndex + 1)&@string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"))">Next</a>
+    </div>
+
+    <div class="page-item @(pageIndex == totalPages ? "disabled" : "")">
+        <a class="page-link" href="?pageIndex=@totalPages&@string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"))">Last</a>
+    </div>
+</nav>
 <style>
     .pagination-info {
         margin: 10px 0;
