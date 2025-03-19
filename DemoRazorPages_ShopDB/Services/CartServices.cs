@@ -14,7 +14,7 @@ namespace DemoRazorPages_ShopDB.Services
             _productServices = productServices;
         }
 
-        // Lấy tất cả giỏ hàng
+        // Get all carts with their items and related products
         public async Task<List<Cart>> GetAllCartsAsync()
         {
             return await _context.Carts
@@ -24,7 +24,7 @@ namespace DemoRazorPages_ShopDB.Services
                 .ToListAsync();
         }
 
-        // Lấy thông tin một giỏ hàng theo ID
+        // Get cart by ID with related items and products
         public async Task<Cart> GetCartByIdAsync(int cartId)
         {
             return await _context.Carts
@@ -33,7 +33,7 @@ namespace DemoRazorPages_ShopDB.Services
                 .FirstOrDefaultAsync(c => c.CartId == cartId);
         }
 
-        // Tạo giỏ hàng mới
+        // Create a new cart
         public async Task<Cart> CreateCartAsync()
         {
             var cart = new Cart
@@ -46,9 +46,15 @@ namespace DemoRazorPages_ShopDB.Services
             return cart;
         }
 
-        // Thêm sản phẩm vào giỏ hàng
+        // Add or update an item in the cart
         public async Task<CartItem> AddItemToCartAsync(int cartId, int productId, int quantity = 1)
         {
+            // Validation
+            if (quantity <= 0)
+            {
+                throw new ArgumentException("Số lượng phải lớn hơn 0");
+            }
+
             var cart = await GetCartByIdAsync(cartId);
             if (cart == null)
             {
@@ -61,26 +67,38 @@ namespace DemoRazorPages_ShopDB.Services
                 throw new ArgumentException("Không tìm thấy sản phẩm");
             }
 
-            // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+            if (product.Quantity < quantity)
+            {
+                throw new ArgumentException($"Số lượng sản phẩm trong kho không đủ (Có: {product.Quantity})");
+            }
+
+            // Check if product already exists in cart
             var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
 
             if (existingItem != null)
             {
-                // Cập nhật số lượng nếu sản phẩm đã tồn tại
+                // Update quantity if product exists
                 existingItem.Quantity += quantity;
+
+                // Check if updated quantity exceeds available stock
+                if (existingItem.Quantity > product.Quantity)
+                {
+                    throw new ArgumentException($"Tổng số lượng trong giỏ vượt quá số lượng có sẵn (Có: {product.Quantity})");
+                }
+
                 _context.CartItems.Update(existingItem);
                 await _context.SaveChangesAsync();
                 return existingItem;
             }
             else
             {
-                // Thêm mới sản phẩm vào giỏ hàng với giá hiện tại của sản phẩm
+                // Add new cart item with current product price
                 var newItem = new CartItem
                 {
                     CartId = cartId,
                     ProductId = productId,
                     Quantity = quantity,
-                    Price = product.Price // Lưu giá sản phẩm tại thời điểm thêm vào giỏ
+                    Price = product.Price // Store current price when adding to cart
                 };
 
                 _context.CartItems.Add(newItem);
@@ -89,10 +107,13 @@ namespace DemoRazorPages_ShopDB.Services
             }
         }
 
-        // Cập nhật số lượng sản phẩm trong giỏ hàng
+        // Update cart item quantity
         public async Task UpdateCartItemQuantityAsync(int cartItemId, int quantity)
         {
-            var cartItem = await _context.CartItems.FindAsync(cartItemId);
+            var cartItem = await _context.CartItems
+                .Include(ci => ci.Product)
+                .FirstOrDefaultAsync(ci => ci.CartItemId == cartItemId);
+
             if (cartItem == null)
             {
                 throw new ArgumentException("Không tìm thấy sản phẩm trong giỏ hàng");
@@ -100,11 +121,17 @@ namespace DemoRazorPages_ShopDB.Services
 
             if (quantity <= 0)
             {
-                // Xóa sản phẩm nếu số lượng <= 0
+                // Remove item if quantity is zero or negative
                 _context.CartItems.Remove(cartItem);
             }
             else
             {
+                // Validate quantity against available stock
+                if (quantity > cartItem.Product.Quantity)
+                {
+                    throw new ArgumentException($"Số lượng yêu cầu vượt quá số lượng có sẵn (Có: {cartItem.Product.Quantity})");
+                }
+
                 cartItem.Quantity = quantity;
                 _context.CartItems.Update(cartItem);
             }
@@ -112,7 +139,7 @@ namespace DemoRazorPages_ShopDB.Services
             await _context.SaveChangesAsync();
         }
 
-        // Xóa một sản phẩm khỏi giỏ hàng
+        // Remove an item from cart
         public async Task RemoveItemFromCartAsync(int cartItemId)
         {
             var cartItem = await _context.CartItems.FindAsync(cartItemId);
@@ -123,7 +150,7 @@ namespace DemoRazorPages_ShopDB.Services
             }
         }
 
-        // Xóa tất cả sản phẩm trong giỏ hàng
+        // Clear all items from a cart
         public async Task ClearCartAsync(int cartId)
         {
             var cartItems = await _context.CartItems
@@ -134,7 +161,7 @@ namespace DemoRazorPages_ShopDB.Services
             await _context.SaveChangesAsync();
         }
 
-        // Xóa một giỏ hàng
+        // Delete a cart and all its items
         public async Task DeleteCartAsync(int cartId)
         {
             var cart = await _context.Carts
@@ -149,7 +176,7 @@ namespace DemoRazorPages_ShopDB.Services
             }
         }
 
-        // Tính tổng giá trị giỏ hàng
+        // Calculate cart total value
         public async Task<decimal> GetCartTotalAsync(int cartId)
         {
             return await _context.CartItems
@@ -157,8 +184,8 @@ namespace DemoRazorPages_ShopDB.Services
                 .SumAsync(ci => ci.Price * ci.Quantity);
         }
 
-        // Chuyển đổi giỏ hàng thành đơn hàng
-        public async Task<Order> ConvertCartToOrderAsync(int cartId, int customerId, int employeeId, string notes = null)
+        // Convert cart to order
+        public async Task<Order> ConvertCartToOrderAsync(int cartId, int customerId, int employeeId, string? orderNote = null)
         {
             var cart = await GetCartByIdAsync(cartId);
             if (cart == null || !cart.CartItems.Any())
@@ -166,30 +193,63 @@ namespace DemoRazorPages_ShopDB.Services
                 throw new ArgumentException("Giỏ hàng trống hoặc không tồn tại");
             }
 
-            // Tạo đơn hàng mới
-            var order = new Order
-            {
-                CustomerId = customerId,
-                EmployeeId = employeeId,
-                OrderDate = DateTime.Now,
-                OrderDetails = new List<OrderDetail>()
-            };
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            // Thêm chi tiết đơn hàng từ giỏ hàng
-            foreach (var item in cart.CartItems)
+            try
             {
-                order.OrderDetails.Add(new OrderDetail
+                // Create new order with the note
+                var order = new Order
                 {
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity
-                });
+                    CustomerId = customerId,
+                    EmployeeId = employeeId,
+                    OrderDate = DateTime.Now,
+                    OrderNote = orderNote,
+                    OrderDetails = new List<OrderDetail>()
+                };
+
+                // Add order details from cart items
+                foreach (var item in cart.CartItems)
+                {
+                    // Get current product to check stock
+                    var product = await _context.Products.FindAsync(item.ProductId);
+
+                    if (product == null)
+                    {
+                        throw new Exception($"Sản phẩm với ID {item.ProductId} không tồn tại");
+                    }
+
+                    if (product.Quantity < item.Quantity)
+                    {
+                        throw new Exception($"Sản phẩm '{product.ProductName}' không đủ số lượng trong kho (Yêu cầu: {item.Quantity}, Có sẵn: {product.Quantity})");
+                    }
+
+                    // Add to order details
+                    order.OrderDetails.Add(new OrderDetail
+                    {
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity
+                    });
+
+                    // Update product quantity
+                    product.Quantity -= item.Quantity;
+                    _context.Products.Update(product);
+                }
+
+                // Save order
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+
+                // Clear the cart after successful order creation
+                await ClearCartAsync(cartId);
+
+                await transaction.CommitAsync();
+                return order;
             }
-
-            // Thêm đơn hàng vào cơ sở dữ liệu
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            return order;
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

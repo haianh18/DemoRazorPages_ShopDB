@@ -13,6 +13,8 @@ public partial class Order
 
     public DateTime? OrderDate { get; set; }
 
+    public string? OrderNote { get; set; }
+
     public virtual Customer? Customer { get; set; }
 
     public virtual Employee? Employee { get; set; }

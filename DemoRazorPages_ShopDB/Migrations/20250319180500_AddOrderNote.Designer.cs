@@ -4,6 +4,7 @@ using DemoRazorPages_ShopDB.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoRazorPages_ShopDB.Migrations
 {
     [DbContext(typeof(ShopDbrazorPagesContext))]
-    partial class ShopDbrazorPagesContextModelSnapshot : ModelSnapshot
+    [Migration("20250319180500_AddOrderNote")]
+    partial class AddOrderNote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

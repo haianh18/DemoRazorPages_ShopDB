@@ -2,11 +2,16 @@
 @model DemoRazorPages_ShopDB.Pages.Products.DetailsModel
 
 @{
-    ViewData["Title"] = "Product Details";
+    ViewData["Title"] = "Chi tiết sản phẩm";
 }
 
 <div class="container">
-    <h2>Product Details</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Chi tiết sản phẩm</h2>
+        <a asp-page="./List" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
@@ -16,123 +21,132 @@
         </div>
     }
 
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <div class="row">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Thông tin sản phẩm</h5>
+                </div>
                 <div class="card-body">
-                    <table class="table table-borderless">
-                        <tr>
-                            <th>Product ID:</th>
-                            <td>@Model.Product.ProductId</td>
-                        </tr>
-                        <tr>
-                            <th>Product Name:</th>
-                            <td>@Model.Product.ProductName</td>
-                        </tr>
-                        <tr>
-                            <th>Category:</th>
-                            <td>@Model.Product.Category?.CategoryName</td>
-                        </tr>
-                        <tr>
-                            <th>Price:</th>
-                            <td>@Model.Product.Price.ToString("C2")</td>
-                        </tr>
-                        <tr>
-                            <th>Quantity In Stock:</th>
-                            <td>@Model.Product.Quantity</td>
-                        </tr>
-                    </table>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">ID:</div>
+                        <div class="col-md-8">@Model.Product.ProductId</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Tên sản phẩm:</div>
+                        <div class="col-md-8">@Model.Product.ProductName</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Danh mục:</div>
+                        <div class="col-md-8">@Model.Product.Category?.CategoryName</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Giá:</div>
+                        <div class="col-md-8 fs-5 fw-bold text-success">@Model.Product.Price.ToString("C0")</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Số lượng tồn kho:</div>
+                        <div class="col-md-8">
+                            @if (Model.Product.Quantity > 0)
+                            {
+                                <span class="badge bg-success">Còn @Model.Product.Quantity sản phẩm</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Hết hàng</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Thao tác</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex gap-2">
+                        <a asp-page="./Edit" asp-route-id="@Model.Product.ProductId" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i> Chỉnh sửa
+                        </a>
+                        <a asp-page="./List" class="btn btn-secondary">
+                            <i class="bi bi-list"></i> Danh sách sản phẩm
+                        </a>
+                        <a asp-page="/Products/List" class="btn btn-success">
+                            <i class="bi bi-bag"></i> Tiếp tục mua sắm
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5>Thêm vào giỏ hàng</h5>
-            </div>
-            <div class="card-body">
-                <form method="get" asp-page="/Carts/AddToCart">
-                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-
-                    <div class="mb-3">
-                        <label for="cartId" class="form-label">Chọn giỏ hàng</label>
-                        <select id="cartId" name="cartId" class="form-select" required>
-                            <option value="">-- Chọn giỏ hàng --</option>
-                            @foreach (var cart in Model.Carts)
-                            {
-                                <option value="@cart.CartId">Giỏ hàng #@cart.CartId (@cart.CreatedDate.ToString("dd/MM/yyyy"))</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="quantity" class="form-label">Số lượng</label>
-                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="@Model.Product.Quantity" required />
-                    </div>
-
-                    <div class="d-flex">
-                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                        <a href="/Carts/Index" class="btn btn-outline-secondary ms-2">Xem giỏ hàng</a>
-                    </div>
-                </form>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Lịch sử đặt hàng</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.OrderDetails != null && Model.OrderDetails.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Đơn hàng</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Khách hàng</th>
+                                        <th>Số lượng</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detail in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td>@detail.OrderId</td>
+                                            <td>@detail.Order?.OrderDate?.ToString("dd/MM/yyyy")</td>
+                                            <td>@detail.Order?.Customer?.CustomerName</td>
+                                            <td>@detail.Quantity</td>
+                                            <td>
+                                                <a asp-page="/Orders/Details" asp-route-id="@detail.OrderId" class="btn btn-sm btn-info">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            Sản phẩm này chưa từng được đặt hàng.
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
-
-    <h3 class="mt-4">Orders Containing This Product</h3>
-
-    @if (Model.OrderDetails != null && Model.OrderDetails.Any())
-    {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Order Date</th>
-                    <th>Customer</th>
-                    <th>Quantity Ordered</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var detail in Model.OrderDetails)
-                {
-                    <tr>
-                        <td>@detail.OrderId</td>
-                        <td>@detail.Order?.OrderDate?.ToString("yyyy-MM-dd")</td>
-                        <td>@detail.Order?.Customer?.CustomerName</td>
-                        <td>@detail.Quantity</td>
-                        <td>
-                            <a asp-page="/Orders/Details" asp-route-id="@detail.OrderId" class="btn btn-sm btn-info">View Order</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>This product has not been ordered yet.</p>
-    }
-
-    <div class="mt-3">
-        <a asp-page="./Edit" asp-route-id="@Model.Product.ProductId" class="btn btn-primary">Edit</a>
-        <a asp-page="./List" class="btn btn-secondary">Back to List</a>
-        <a asp-page="/Cart/Index" class="btn btn-success">View Cart</a>
-    </div>
 </div>
 
-<style>
-    .card {
-        margin-bottom: 20px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    th {
-        width: 40%;
-    }
-
-    h3 {
-        margin-top: 30px;
-        margin-bottom: 15px;
-    }
-</style>
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+}

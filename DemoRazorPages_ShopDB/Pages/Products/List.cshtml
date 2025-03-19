@@ -6,151 +6,218 @@
     ViewData["Title"] = "Product List";
 }
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
+<div class="container-fluid">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-<div style="display: flex;">
-    <div style="flex: 1; padding-right: 20px; margin-left: 20px">
-        <form method="get">
-            <h1>Filter Products</h1>
-            <div>
-                <p>Category</p>
-                <select name="categoryid">
-                    <option value="0">All Categories</option>
-                    @if (Model.Categories != null)
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Filter Products</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" id="filterForm">
+                        <input type="hidden" name="SelectedCartId" value="@Model.SelectedCartId" />
+
+                        <div class="mb-3">
+                            <label for="categoryid" class="form-label">Category</label>
+                            <select id="categoryid" name="categoryid" class="form-select">
+                                <option value="0">All Categories</option>
+                                @if (Model.Categories != null)
+                                {
+                                    @foreach (Category category in Model.Categories)
+                                    {
+                                        <option value="@category.CategoryId" selected="@(category.CategoryId == Model.Filter.CategoryId)">
+                                            @category.CategoryName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Price Range</label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">Min</span>
+                                <input type="number" class="form-control" name="minprice" value="@Model.Filter.MinPrice" min="0" step="0.01" />
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text">Max</span>
+                                <input type="number" class="form-control" name="maxprice" value="@Model.Filter.MaxPrice" min="0" step="0.01" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="searchterm" class="form-label">Search</label>
+                            <input type="text" id="searchterm" class="form-control" name="searchterm" value="@Model.Filter.SearchTerm" placeholder="Search by product name..." />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Shopping Cart</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="SelectCart" id="cartSelectForm">
+                        <!-- Preserve all filter parameters -->
+                        <input type="hidden" name="categoryid" value="@Model.Filter.CategoryId" />
+                        <input type="hidden" name="minprice" value="@Model.Filter.MinPrice" />
+                        <input type="hidden" name="maxprice" value="@Model.Filter.MaxPrice" />
+                        <input type="hidden" name="searchterm" value="@Model.Filter.SearchTerm" />
+                        <input type="hidden" name="pageIndex" value="@Model.pageIndex" />
+
+                        <div class="mb-3">
+                            <label for="selectedCartId" class="form-label">Select Cart</label>
+                            <select id="selectedCartId" name="selectedCartId" class="form-select" onchange="this.form.submit()">
+                                <option value="">-- Select or Create Cart --</option>
+                                @if (Model.Carts != null && Model.Carts.Any())
+                                {
+                                    @foreach (var cart in Model.Carts)
+                                    {
+                                        <option value="@cart.CartId" selected="@(Model.SelectedCartId == cart.CartId)">
+                                            Cart #@cart.CartId (Created: @cart.CreatedDate.ToString("dd/MM/yyyy"))
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </form>
+
+                    <div class="d-grid gap-2">
+                        <a asp-page="/Carts/Index" class="btn btn-outline-success">View All Carts</a>
+                        @if (Model.SelectedCartId.HasValue)
+                        {
+                            <a asp-page="/Carts/Details" asp-route-id="@Model.SelectedCartId" class="btn btn-success">View Current Cart</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Product List</h5>
+                    <a asp-page="./Create" class="btn btn-success">Add New Product</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th style="min-width: 230px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Pagination.Items != null && Model.Pagination.Items.Any())
+                                {
+                                    @foreach (var product in Model.Pagination.Items)
+                                    {
+                                        <tr>
+                                            <td>@product.ProductId</td>
+                                            <td>@product.ProductName</td>
+                                            <td>@product.Category?.CategoryName</td>
+                                            <td>@product.Price.ToString("C0")</td>
+                                            <td>@product.Quantity</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a asp-page="./Details" asp-route-id="@product.ProductId" class="btn btn-sm btn-info">
+                                                        <i class="bi bi-eye"></i> Chi tiết
+                                                    </a>
+                                                    <a asp-page="./Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary">
+                                                        <i class="bi bi-pencil"></i> Sửa
+                                                    </a>
+                                                    <form method="post" asp-page-handler="Delete" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                                        <input type="hidden" name="productId" value="@product.ProductId" />
+                                                        <input type="hidden" name="categoryid" value="@Model.Filter.CategoryId" />
+                                                        <input type="hidden" name="minprice" value="@Model.Filter.MinPrice" />
+                                                        <input type="hidden" name="maxprice" value="@Model.Filter.MaxPrice" />
+                                                        <input type="hidden" name="searchterm" value="@Model.Filter.SearchTerm" />
+                                                        <input type="hidden" name="pageIndex" value="@Model.pageIndex" />
+                                                        <input type="hidden" name="SelectedCartId" value="@Model.SelectedCartId" />
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="bi bi-trash"></i> Xóa
+                                                        </button>
+                                                    </form>
+
+                                                    <form method="post" asp-page-handler="AddToCart" class="d-flex">
+                                                        <input type="hidden" name="productId" value="@product.ProductId" />
+                                                        <input type="hidden" name="categoryid" value="@Model.Filter.CategoryId" />
+                                                        <input type="hidden" name="minprice" value="@Model.Filter.MinPrice" />
+                                                        <input type="hidden" name="maxprice" value="@Model.Filter.MaxPrice" />
+                                                        <input type="hidden" name="searchterm" value="@Model.Filter.SearchTerm" />
+                                                        <input type="hidden" name="pageIndex" value="@Model.pageIndex" />
+                                                        <input type="hidden" name="SelectedCartId" value="@Model.SelectedCartId" />
+
+                                                        <input type="number" name="quantity" value="1" min="1" max="@product.Quantity"
+                                                               class="form-control form-control-sm" style="width: 50px; margin-right: 2px;" />
+                                                        <button type="submit" class="btn btn-sm btn-success"
+                                                        @(Model.SelectedCartId.HasValue || true ? "" : "disabled")>
+                                                            <i class="bi bi-cart-plus"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center py-3">No products found matching your criteria.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (Model.Pagination.TotalPages > 1)
                     {
-                        @foreach (Category category in Model.Categories)
-                        {
-                            <option value="@category.CategoryId" selected="@(category.CategoryId == Model.Filter.CategoryId)">
-                                @category.CategoryName
-                            </option>
-                        }
+                        <div class="mt-3">
+                            <partial name="_Pagination" model="Model.Pagination" />
+                        </div>
                     }
-                </select>
-            </div>
-            <div>
-                <p>Price Range</p>
-                <div>
-                    Min: <input type="number" name="minprice" value="@Model.Filter.MinPrice" min="0" step="0.01" />
                 </div>
-                <div>
-                    Max: <input type="number" name="maxprice" value="@Model.Filter.MaxPrice" min="0" step="0.01" />
-                </div>
-            </div>
-            <div>
-                <p>Name Search</p>
-                <input type="text" name="searchterm" value="@Model.Filter.SearchTerm" placeholder="Search by product name..." />
-            </div>
-            <div style="margin-top: 15px;">
-                <input type="submit" value="Filter" class="btn btn-primary" />
-            </div>
-        </form>
-
-        <div class="mt-3">
-            <h3>Select Cart to Add Products</h3>
-            <div class="d-flex align-items-center">
-                <form method="post" asp-page-handler="SelectCart" class="flex-grow-1 me-2">
-                    <select name="selectedCartId" class="form-select" onchange="this.form.submit()">
-                        <option value="">Create New Cart</option>
-                        @if (Model.Carts != null)
-                        {
-                            @foreach (var cart in Model.Carts)
-                            {
-                                <option value="@cart.CartId"
-                                        selected="@(Model.SelectedCartId == cart.CartId)">
-                                    Cart #@cart.CartId (Created: @cart.CreatedDate.ToString("dd/MM/yyyy"))
-                                </option>
-                            }
-                        }
-                    </select>
-                </form>
-                <a asp-page="/Carts/Index" class="btn btn-secondary">View Cart List</a>
             </div>
         </div>
     </div>
-
-    <div style="flex: 3;">
-        @if (Model != null)
-        {
-            <div>
-                <h1>Product List</h1>
-                <p>
-                    <a asp-page="./Create" class="btn btn-success">Create New Product</a>
-                </p>
-                <table border="1" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Product ID</th>
-                            <th>Product Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Actions</th>
-                            <th>Add to Cart</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Pagination.Items != null && Model.Pagination.Items.Any())
-                        {
-                            @foreach (var product in Model.Pagination.Items)
-                            {
-                                <tr>
-                                    <td>@product.ProductId</td>
-                                    <td>@product.ProductName</td>
-                                    <td>@product.Category?.CategoryName</td>
-                                    <td>@product.Price.ToString("C2")</td>
-                                    <td>@product.Quantity</td>
-                                    <td>
-                                        <a asp-page="./Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary">Edit</a>
-                                        <a asp-page="./Details" asp-route-id="@product.ProductId" class="btn btn-sm btn-info">Details</a>
-                                        <form method="post" asp-page-handler="Delete" style="display: inline;">
-                                            <input type="hidden" name="productId" value="@product.ProductId" />
-                                            <input type="hidden" name="categoryid" value="@Model.Filter.CategoryId" />
-                                            <input type="hidden" name="minprice" value="@Model.Filter.MinPrice" />
-                                            <input type="hidden" name="maxprice" value="@Model.Filter.MaxPrice" />
-                                            <input type="hidden" name="searchterm" value="@Model.Filter.SearchTerm" />
-                                            <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this product?')">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form method="post" asp-page-handler="AddToCart" class="d-flex align-items-center">
-                                            <input type="hidden" name="productId" value="@product.ProductId" />
-                                            <input type="number" name="quantity" value="1" min="1" max="@product.Quantity"
-                                                   class="form-control form-control-sm" style="width: 70px;" />
-                                            <button type="submit" class="btn btn-sm btn-success ms-2">Add</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="7" class="text-center">No products found matching your criteria.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin-top: 20px;">
-                <partial name="_Pagination" model="Model.Pagination" />
-            </div>
-        }
-    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Add Bootstrap Icons for a nicer UI
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-dismiss alerts after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+}

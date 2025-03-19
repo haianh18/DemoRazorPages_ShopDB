@@ -26,6 +26,15 @@ namespace DemoRazorPages_ShopDB.Pages.Carts
         public List<Employee> Employees { get; set; } = new List<Employee>();
         public List<Customer> Customers { get; set; } = new List<Customer>();
 
+        [BindProperty]
+        public int SelectedCustomerId { get; set; }
+
+        [BindProperty]
+        public int SelectedEmployeeId { get; set; }
+
+        [BindProperty]
+        public string? OrderNote { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
             var cart = await _cartServices.GetCartByIdAsync(id);
@@ -38,19 +47,30 @@ namespace DemoRazorPages_ShopDB.Pages.Carts
             Cart = cart;
             CartTotal = await _cartServices.GetCartTotalAsync(id);
 
-            // Lấy danh sách nhân viên
-            Employees = await _employeeServices.GetEmployeesAsync();
-
-            // Lấy danh sách khách hàng
-            Customers = await _customerServices.GetCustomersAsync();
+            // Load employees and customers
+            await LoadDataAsync();
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int cartId, int customerId, int employeeId, string notes)
+        public async Task<IActionResult> OnPostAsync(int cartId, int customerId, int employeeId, string? orderNote)
         {
+            // Validation
+            if (customerId == 0)
+            {
+                ModelState.AddModelError("customerId", "Vui lòng chọn khách hàng.");
+            }
+
+            if (employeeId == 0)
+            {
+                ModelState.AddModelError("employeeId", "Vui lòng chọn nhân viên phụ trách.");
+            }
+
             if (!ModelState.IsValid)
             {
+                SelectedCustomerId = customerId;
+                SelectedEmployeeId = employeeId;
+                OrderNote = orderNote;
                 await LoadDataAsync(cartId);
                 return Page();
             }
@@ -64,28 +84,40 @@ namespace DemoRazorPages_ShopDB.Pages.Carts
 
             try
             {
-                // Tạo đơn hàng từ giỏ hàng với khách hàng đã chọn
+                // Create order from cart with the order note
                 var order = await _cartServices.ConvertCartToOrderAsync(
                     cartId,
                     customerId,
                     employeeId,
-                    notes);
+                    orderNote);
 
                 TempData["SuccessMessage"] = "Đơn hàng đã được tạo thành công!";
                 return RedirectToPage("/Orders/Details", new { id = order.OrderId });
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"Lỗi khi tạo đơn hàng: {ex.Message}");
+                TempData["ErrorMessage"] = $"Lỗi khi tạo đơn hàng: {ex.Message}";
+
+                // Preserve user selections
+                SelectedCustomerId = customerId;
+                SelectedEmployeeId = employeeId;
+                OrderNote = orderNote;
+
                 await LoadDataAsync(cartId);
                 return Page();
             }
         }
 
-        private async Task LoadDataAsync(int cartId)
+        private async Task LoadDataAsync(int? cartId = null)
         {
-            Cart = await _cartServices.GetCartByIdAsync(cartId);
-            CartTotal = await _cartServices.GetCartTotalAsync(cartId);
+            // If cart ID is provided, load the cart
+            if (cartId.HasValue)
+            {
+                Cart = await _cartServices.GetCartByIdAsync(cartId.Value);
+                CartTotal = await _cartServices.GetCartTotalAsync(cartId.Value);
+            }
+
+            // Load employees and customers
             Employees = await _employeeServices.GetEmployeesAsync();
             Customers = await _customerServices.GetCustomersAsync();
         }

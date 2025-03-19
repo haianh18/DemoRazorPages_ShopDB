@@ -2,64 +2,141 @@
 @model DemoRazorPages_ShopDB.Pages.Orders.DetailsModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Chi tiết đơn hàng";
 }
 
-@{
-    ViewBag.Title = "Order Detail";
-}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Chi tiết đơn hàng #@Model.Order.OrderId</h1>
+        <div class="action-buttons">
+            <a asp-page="./List" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại danh sách
+            </a>
+            <form method="post" asp-page-handler="Delete" asp-page="./List" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?');">
+                <input type="hidden" name="orderId" value="@Model.Order.OrderId" />
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Xóa đơn hàng
+                </button>
+            </form>
+        </div>
+    </div>
 
-<h2>Order Detail</h2>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Thông tin đơn hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Mã đơn hàng:</div>
+                        <div class="col-md-8">@Model.Order.OrderId</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Ngày đặt:</div>
+                        <div class="col-md-8">@(Model.Order.OrderDate?.ToString("dd/MM/yyyy HH:mm") ?? "-")</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Khách hàng:</div>
+                        <div class="col-md-8">
+                            @if (Model.Order.Customer != null)
+                            {
+                                <div>@Model.Order.Customer.CustomerName</div>
+                                <div class="text-muted small">@Model.Order.Customer.Email</div>
+                                <div class="text-muted small">@Model.Order.Customer.Phone</div>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Nhân viên:</div>
+                        <div class="col-md-8">
+                            @if (Model.Order.Employee != null)
+                            {
+                                <div>@Model.Order.Employee.EmployeeName</div>
+                                <div class="text-muted small">@Model.Order.Employee.Position</div>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </div>
+                    </div>
 
-<table border="1">
-    <tr>
-        <th>Order ID</th>
-        <td>@Model.Order.OrderId</td>
-    </tr>
-    <tr>
-        <th>Customer</th>
-        <td>@Model.Order.Customer?.CustomerName</td>
-    </tr>
-    <tr>
-        <th>Employee</th>
-        <td>@Model.Order.Employee?.EmployeeName</td>
-    </tr>
-    <tr>
-        <th>Order Date</th>
-        <td>@Model.Order.OrderDate.ToString()</td>
-    </tr>
-    
-</table>
+                    @if (!string.IsNullOrEmpty(Model.Order.OrderNote))
+                    {
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Ghi chú:</div>
+                            <div class="col-md-8">
+                                <div class="p-2 bg-light rounded">@Model.Order.OrderNote</div>
+                            </div>
+                        </div>
+                    }
 
-<h3>Products in this Order</h3>
+                    @{
+                        var totalAmount = Model.Order.OrderDetails.Sum(od => od.Quantity * (od.Product?.Price ?? 0));
+                    }
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>Product ID</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (@Model.Order != null)
-        {
-            @foreach (var detail in @Model.Order.OrderDetails)
-            {
-                <tr>
-                    <td>@detail.ProductId</td>
-                    <td>@detail.Product?.ProductName</td>
-                    <td>@detail.Product?.Price</td>
-                    <td>@detail.Quantity</td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="5">No products available for this order.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    <div class="row">
+                        <div class="col-md-4 fw-bold">Tổng tiền:</div>
+                        <div class="col-md-8 fw-bold fs-5 text-success">@totalAmount.ToString("C0")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Chi tiết sản phẩm</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Order.OrderDetails != null && Model.Order.OrderDetails.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detail in Model.Order.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="fw-medium">@detail.Product?.ProductName</div>
+                                                <small class="text-muted">ID: @detail.ProductId</small>
+                                            </td>
+                                            <td>@(detail.Product?.Price.ToString("C0") ?? "-")</td>
+                                            <td>@detail.Quantity</td>
+                                            <td class="fw-bold">@((detail.Quantity * (detail.Product?.Price ?? 0)).ToString("C0"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
+                                        <td class="fw-bold fs-5 text-success">@totalAmount.ToString("C0")</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info mb-0">
+                            Không có sản phẩm nào trong đơn hàng này.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -106,6 +106,8 @@ public partial class ShopDbrazorPagesContext : DbContext
             entity.Property(e => e.OrderDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.OrderNote)
+                .HasMaxLength(500);
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)

@@ -5,105 +5,184 @@
 }
 
 <div class="container">
-    <h1>Chi tiết giỏ hàng #@Model.Cart.CartId</h1>
-    <p>Ngày tạo: @Model.Cart.CreatedDate.ToString("dd/MM/yyyy HH:mm")</p>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="mb-0">Chi tiết giỏ hàng #@Model.Cart.CartId</h1>
+            <p class="text-muted">Ngày tạo: @Model.Cart.CreatedDate.ToString("dd/MM/yyyy HH:mm")</p>
+        </div>
 
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Thêm sản phẩm vào giỏ hàng</h5>
+        <div class="action-buttons">
+            <a asp-page="/Products/List" asp-route-SelectedCartId="@Model.Cart.CartId" class="btn btn-primary">
+                <i class="bi bi-bag"></i> Tiếp tục mua sắm
+            </a>
+            <a asp-page="./Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại danh sách
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Thông tin giỏ hàng</h5>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                <div>
+                    <div class="text-muted">Tổng số loại sản phẩm:</div>
+                    <div class="fs-4 fw-bold">@Model.Cart.CartItems.Count</div>
                 </div>
-                <div class="card-body">
-                    <form method="post" asp-page-handler="AddItem">
-                        <div class="mb-3">
-                            <label for="productId" class="form-label">Sản phẩm</label>
-                            <select id="productId" name="productId" class="form-select" required>
-                                <option value="">-- Chọn sản phẩm --</option>
-                                @foreach (var product in Model.Products)
-                                {
-                                    <option value="@product.ProductId">@product.ProductName - @product.Price.ToString("C0")</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="quantity" class="form-label">Số lượng</label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" required />
-                        </div>
-                        <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
-                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                    </form>
+                <div>
+                    <div class="text-muted">Tổng số lượng sản phẩm:</div>
+                    <div class="fs-4 fw-bold">@Model.Cart.CartItems.Sum(ci => ci.Quantity)</div>
                 </div>
+                <div>
+                    <div class="text-muted">Tổng tiền:</div>
+                    <div class="fs-4 fw-bold text-success">@Model.CartTotal.ToString("C0")</div>
+                </div>
+            </div>
+
+            <div class="action-buttons justify-content-center">
+                @if (Model.Cart.CartItems.Any())
+                {
+                    <a asp-page="./Checkout" asp-route-id="@Model.Cart.CartId" class="btn btn-success">
+                        <i class="bi bi-credit-card"></i> Thanh toán
+                    </a>
+                }
+                <a asp-page="/Products/List" asp-route-SelectedCartId="@Model.Cart.CartId" class="btn btn-primary">
+                    <i class="bi bi-bag"></i> Mua thêm sản phẩm
+                </a>
             </div>
         </div>
     </div>
 
-    @if (Model.Cart.CartItems.Any())
-    {
-        <h3>Sản phẩm trong giỏ hàng</h3>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Thành tiền</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Cart.CartItems)
+    <div class="card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Sản phẩm trong giỏ hàng</h3>
+            @if (Model.Cart.CartItems.Any())
+            {
+                <form method="post" asp-page-handler="ClearCart"
+                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng?')">
+                    <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-trash"></i> Xóa tất cả sản phẩm
+                    </button>
+                </form>
+            }
+        </div>
+        <div class="card-body">
+            @if (Model.Cart.CartItems.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                                <th style="min-width: 100px;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Cart.CartItems)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="fw-bold">@item.Product.ProductName</div>
+                                                <small class="text-muted">ID: @item.Product.ProductId</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@item.Price.ToString("C0")</td>
+                                    <td>
+                                        <form method="post" asp-page-handler="UpdateQuantity" class="d-flex align-items-center">
+                                            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                            <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+                                            <input type="number" name="quantity" value="@item.Quantity" min="1"
+                                                   class="form-control form-control-sm" style="width: 70px;" />
+                                            <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="fw-bold">@((item.Price * item.Quantity).ToString("C0"))</td>
+                                    <td>
+                                        <form method="post" asp-page-handler="RemoveItem">
+                                            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                            <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Tổng cộng:</strong></td>
+                                <td class="fw-bold fs-5 text-success">@Model.CartTotal.ToString("C0")</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="mt-4 action-buttons justify-content-center">
+                    @if (Model.Cart.CartItems.Any())
                     {
-                        <tr>
-                            <td>@item.Product.ProductName</td>
-                            <td>@item.Price.ToString("C0")</td>
-                            <td>
-                                <form method="post" asp-page-handler="UpdateQuantity" class="d-flex align-items-center">
-                                    <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-                                    <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
-                                    <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control form-control-sm" style="width: 70px;" />
-                                    <button type="submit" class="btn btn-sm btn-outline-secondary ms-2">Cập nhật</button>
-                                </form>
-                            </td>
-                            <td>@((item.Price * item.Quantity).ToString("C0"))</td>
-                            <td>
-                                <form method="post" asp-page-handler="RemoveItem">
-                                    <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-                                    <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
-                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                                </form>
-                            </td>
-                        </tr>
+                        <a asp-page="./Checkout" asp-route-id="@Model.Cart.CartId" class="btn btn-success">
+                            <i class="bi bi-credit-card"></i> Thanh toán
+                        </a>
                     }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3" class="text-end"><strong>Tổng cộng:</strong></td>
-                        <td><strong>@Model.CartTotal.ToString("C0")</strong></td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
 
-        <div class="mt-3 d-flex gap-2">
-            <form method="post" asp-page-handler="ClearCart" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng?')">
-                <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
-                <button type="submit" class="btn btn-warning">Xóa tất cả sản phẩm</button>
-            </form>
-
-            <a asp-page="./Checkout" asp-route-id="@Model.Cart.CartId" class="btn btn-success">Thanh toán</a>
+                    <a asp-page="/Products/List" asp-route-SelectedCartId="@Model.Cart.CartId" class="btn btn-primary">
+                        <i class="bi bi-bag"></i> Tiếp tục mua sắm
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <h4 class="alert-heading"><i class="bi bi-cart"></i> Giỏ hàng trống</h4>
+                    <p>Giỏ hàng của bạn hiện đang trống. Hãy thêm sản phẩm vào giỏ hàng.</p>
+                    <hr>
+                    <a asp-page="/Products/List" asp-route-SelectedCartId="@Model.Cart.CartId" class="btn btn-primary">
+                        <i class="bi bi-bag"></i> Đi mua sắm ngay
+                    </a>
+                </div>
+            }
         </div>
-    }
-    else
-    {
-        <div class="alert alert-info">
-            <p>Giỏ hàng trống. Hãy thêm sản phẩm vào giỏ hàng.</p>
-        </div>
-    }
-
-    <div class="mt-3">
-        <a asp-page="./Index" class="btn btn-secondary">Quay lại danh sách giỏ hàng</a>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+}

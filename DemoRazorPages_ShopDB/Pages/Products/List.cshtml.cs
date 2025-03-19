@@ -39,11 +39,92 @@ namespace DemoRazorPages_ShopDB.Pages.Products
 
         public async Task OnGetAsync()
         {
+            await LoadDataAsync();
+        }
+
+        public async Task<IActionResult> OnPostSelectCartAsync(int? selectedCartId)
+        {
+            SelectedCartId = selectedCartId;
+
+            // Redirect to the same page while preserving all filter parameters
+            return RedirectToPage(new
+            {
+                SelectedCartId = selectedCartId,
+                pageIndex = pageIndex ?? 1,
+                categoryid = Filter.CategoryId,
+                minprice = Filter.MinPrice,
+                maxprice = Filter.MaxPrice,
+                searchterm = Filter.SearchTerm
+            });
+        }
+
+        public async Task<IActionResult> OnPostAddToCartAsync(int productId, int quantity = 1)
+        {
+            try
+            {
+                // Create a new cart only if no cart is selected and the user clicks Add To Cart
+                if (!SelectedCartId.HasValue)
+                {
+                    var newCart = await _cartServices.CreateCartAsync();
+                    SelectedCartId = newCart.CartId;
+                }
+
+                // Add product to cart
+                await _cartServices.AddItemToCartAsync(SelectedCartId.Value, productId, quantity);
+
+                TempData["SuccessMessage"] = "Sản phẩm đã được thêm vào giỏ hàng!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Lỗi: {ex.Message}";
+            }
+
+            // Preserve all filters and parameters
+            return RedirectToPage(new
+            {
+                SelectedCartId,
+                pageIndex = pageIndex ?? 1,
+                categoryid = Filter.CategoryId,
+                minprice = Filter.MinPrice,
+                maxprice = Filter.MaxPrice,
+                searchterm = Filter.SearchTerm
+            });
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int productId, int? categoryid, decimal? minprice, decimal? maxprice, string searchterm)
+        {
+            bool success = _productServices.DeleteProduct(productId);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Sản phẩm đã được xóa thành công!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Không thể xóa sản phẩm vì nó đang được sử dụng trong đơn hàng!";
+            }
+
+            // Preserve filter values
+            Filter.CategoryId = categoryid;
+            Filter.MinPrice = minprice;
+            Filter.MaxPrice = maxprice;
+            Filter.SearchTerm = searchterm;
+
+            return RedirectToPage(new
+            {
+                SelectedCartId,
+                pageIndex = pageIndex ?? 1,
+                categoryid = Filter.CategoryId,
+                minprice = Filter.MinPrice,
+                maxprice = Filter.MaxPrice,
+                searchterm = Filter.SearchTerm
+            });
+        }
+
+        private async Task LoadDataAsync()
+        {
             Categories = _categoryServices.GetCategories();
-
             Products = _productServices.GetFilteredProducts(Filter);
-
-            // Lấy danh sách giỏ hàng để người dùng chọn
             Carts = await _cartServices.GetAllCartsAsync();
 
             if (Products != null)
@@ -65,89 +146,6 @@ namespace DemoRazorPages_ShopDB.Pages.Products
                     Filter = Filter
                 };
             }
-        }
-
-        public async Task<IActionResult> OnPostSelectCartAsync(int? selectedCartId)
-        {
-            // Nếu không chọn giỏ hàng, tạo giỏ hàng mới
-            if (!selectedCartId.HasValue)
-            {
-                var newCart = await _cartServices.CreateCartAsync();
-                selectedCartId = newCart.CartId;
-            }
-
-            // Quay lại trang với cartId được chọn
-            return RedirectToPage(new
-            {
-                SelectedCartId = selectedCartId,
-                pageIndex = pageIndex ?? 1,
-                categoryid = Filter.CategoryId,
-                minprice = Filter.MinPrice,
-                maxprice = Filter.MaxPrice,
-                searchterm = Filter.SearchTerm
-            });
-        }
-
-        public async Task<IActionResult> OnPostAddToCartAsync(int productId, int quantity = 1)
-        {
-            try
-            {
-                // Nếu chưa chọn cart, tạo mới
-                if (!SelectedCartId.HasValue)
-                {
-                    var newCart = await _cartServices.CreateCartAsync();
-                    SelectedCartId = newCart.CartId;
-                }
-
-                // Thêm sản phẩm vào giỏ hàng
-                await _cartServices.AddItemToCartAsync(SelectedCartId.Value, productId, quantity);
-
-                TempData["SuccessMessage"] = "Sản phẩm đã được thêm vào giỏ hàng!";
-
-                // Quay lại trang danh sách sản phẩm với các filter và trang hiện tại
-                return RedirectToPage(new
-                {
-                    SelectedCartId,
-                    pageIndex = pageIndex ?? 1,
-                    categoryid = Filter.CategoryId,
-                    minprice = Filter.MinPrice,
-                    maxprice = Filter.MaxPrice,
-                    searchterm = Filter.SearchTerm
-                });
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = $"Lỗi: {ex.Message}";
-                return RedirectToPage(new
-                {
-                    SelectedCartId,
-                    pageIndex = pageIndex ?? 1,
-                    categoryid = Filter.CategoryId,
-                    minprice = Filter.MinPrice,
-                    maxprice = Filter.MaxPrice,
-                    searchterm = Filter.SearchTerm
-                });
-            }
-        }
-
-        public async Task<IActionResult> OnPostDeleteAsync(int productId, int? categoryid, decimal? minprice, decimal? maxprice, string searchterm)
-        {
-            bool success = _productServices.DeleteProduct(productId);
-
-            // Preserve filter values
-            Filter.CategoryId = categoryid;
-            Filter.MinPrice = minprice;
-            Filter.MaxPrice = maxprice;
-            Filter.SearchTerm = searchterm;
-
-            return RedirectToPage(new
-            {
-                SelectedCartId,
-                categoryid = Filter.CategoryId,
-                minprice = Filter.MinPrice,
-                maxprice = Filter.MaxPrice,
-                searchterm = Filter.SearchTerm
-            });
         }
     }
 }

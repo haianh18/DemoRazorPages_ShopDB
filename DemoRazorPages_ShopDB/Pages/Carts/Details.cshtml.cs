@@ -27,11 +27,12 @@ namespace DemoRazorPages_ShopDB.Pages.Carts
             var cart = await _cartServices.GetCartByIdAsync(id);
             if (cart == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Không tìm thấy giỏ hàng.";
+                return RedirectToPage("./Index");
             }
 
             Cart = cart;
-            Products = await _productServices.GetAllProductsAsync();
+            await LoadProductsAsync();
             CartTotal = await _cartServices.GetCartTotalAsync(id);
 
             return Page();
@@ -39,26 +40,74 @@ namespace DemoRazorPages_ShopDB.Pages.Carts
 
         public async Task<IActionResult> OnPostAddItemAsync(int cartId, int productId, int quantity)
         {
-            await _cartServices.AddItemToCartAsync(cartId, productId, quantity);
+            try
+            {
+                if (quantity <= 0)
+                {
+                    throw new ArgumentException("Số lượng phải lớn hơn 0");
+                }
+
+                await _cartServices.AddItemToCartAsync(cartId, productId, quantity);
+                TempData["SuccessMessage"] = "Sản phẩm đã được thêm vào giỏ hàng!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
             return RedirectToPage(new { id = cartId });
         }
 
         public async Task<IActionResult> OnPostUpdateQuantityAsync(int cartId, int cartItemId, int quantity)
         {
-            await _cartServices.UpdateCartItemQuantityAsync(cartItemId, quantity);
+            try
+            {
+                await _cartServices.UpdateCartItemQuantityAsync(cartItemId, quantity);
+                TempData["SuccessMessage"] = "Số lượng đã được cập nhật!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
             return RedirectToPage(new { id = cartId });
         }
 
         public async Task<IActionResult> OnPostRemoveItemAsync(int cartId, int cartItemId)
         {
-            await _cartServices.RemoveItemFromCartAsync(cartItemId);
+            try
+            {
+                await _cartServices.RemoveItemFromCartAsync(cartItemId);
+                TempData["SuccessMessage"] = "Sản phẩm đã được xóa khỏi giỏ hàng!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
             return RedirectToPage(new { id = cartId });
         }
 
         public async Task<IActionResult> OnPostClearCartAsync(int cartId)
         {
-            await _cartServices.ClearCartAsync(cartId);
+            try
+            {
+                await _cartServices.ClearCartAsync(cartId);
+                TempData["SuccessMessage"] = "Đã xóa tất cả sản phẩm trong giỏ hàng!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
             return RedirectToPage(new { id = cartId });
+        }
+
+        private async Task LoadProductsAsync()
+        {
+            // Load only products that have quantity > 0
+            var allProducts = await _productServices.GetAllProductsAsync();
+            Products = allProducts.Where(p => p.Quantity > 0).ToList();
         }
     }
 }
