@@ -9,80 +9,96 @@
         fromdate = Model.Filter?.FromDate?.ToString("yyyy-MM-dd"),
         todate = Model.Filter?.ToDate?.ToString("yyyy-MM-dd")
     };
+
+    // Calculate page range to display
+    int startPage = Math.Max(1, Model.PageIndex - 2);
+    int endPage = Math.Min(Model.TotalPages, startPage + 4);
+
+    // Adjust start page if we're near the end to always show 5 pages if possible
+    if (endPage - startPage < 4 && startPage > 1)
+    {
+        startPage = Math.Max(1, endPage - 4);
+    }
 }
 
+<div class="pagination-info">
+    Showing page @Model.PageIndex of @Model.TotalPages
+</div>
+
 <nav aria-label="Page navigation" class="pagination-container">
-    @if (Model.PageIndex > 1)
+    <div class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+        <a class="page-link" asp-route-pageIndex="1" asp-route-employeeid="@filterParams.employeeid"
+           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
+           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">First</a>
+    </div>
+
+    <div class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+        <a class="page-link" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-employeeid="@filterParams.employeeid"
+           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
+           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Previous</a>
+    </div>
+
+    @if (startPage > 1)
     {
         <div class="page-item">
-            <a class="page-link" asp-route-pageIndex="1" asp-route-employeeid="@filterParams.employeeid" asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid" asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">First Page</a>
-        </div>
-    }
-    @if (Model.HasPreviousPage)
-    {
-        <div class="page-item">
-            <a class="page-link" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-employeeid="@filterParams.employeeid" asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid" asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Previous</a>
+            <span class="page-link ellipsis">...</span>
         </div>
     }
 
-    @if (Model.PageIndex > 5)
-    {
-        <div class="page-item">
-            <a class="page-link" asp-route-pageIndex="1" asp-route-employeeid="@filterParams.employeeid" asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid" asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">1</a>
-        </div>
-        <div class="page-item">
-            <span class="page-link">...</span>
-        </div>
-    }
-
-    @for (int i = Math.Max(1, Model.PageIndex - 5); i <= Math.Min(Model.TotalPages, Model.PageIndex + 5); i++)
+    @for (int i = startPage; i <= endPage; i++)
     {
         <div class="page-item @(i == Model.PageIndex ? "active" : "")">
-            <a class="page-link" asp-route-pageIndex="@i" asp-route-employeeid="@filterParams.employeeid" asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid" asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">@i</a>
+            <a class="page-link" asp-route-pageIndex="@i" asp-route-employeeid="@filterParams.employeeid"
+               asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
+               asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">@i</a>
         </div>
     }
 
-    @if (Model.PageIndex + 5 < Model.TotalPages)
+    @if (endPage < Model.TotalPages)
     {
         <div class="page-item">
-            <span class="page-link">...</span>
-        </div>
-        <div class="page-item">
-            <a class="page-link" asp-route-pageIndex="@(Model.TotalPages)" asp-route-employeeid="@filterParams.employeeid" asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid" asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">@Model.TotalPages</a>
+            <span class="page-link ellipsis">...</span>
         </div>
     }
 
-    @if (Model.HasNextPage)
-    {
-        <div class="page-item">
-            <a class="page-link" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-employeeid="@filterParams.employeeid" asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid" asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Next</a>
-        </div>
-    }
-    @if (Model.PageIndex < Model.TotalPages)
-    {
-        <div class="page-item">
-            <a class="page-link" asp-route-pageIndex="@(Model.TotalPages)" asp-route-employeeid="@filterParams.employeeid" asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid" asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Last Page</a>
-        </div>
-    }
+    <div class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+        <a class="page-link" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-employeeid="@filterParams.employeeid"
+           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
+           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Next</a>
+    </div>
+
+    <div class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+        <a class="page-link" asp-route-pageIndex="@Model.TotalPages" asp-route-employeeid="@filterParams.employeeid"
+           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
+           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Last</a>
+    </div>
 </nav>
 
 <style>
+    .pagination-info {
+        margin: 10px 0;
+        color: #666;
+    }
+
     .pagination-container {
         display: flex;
-        justify-content: flex-start;
+        justify-content: left;
         align-items: center;
+        margin: 20px 0;
     }
 
     .page-item {
-        margin: 0 5px;
+        margin: 0 3px;
     }
 
     .page-link {
         text-decoration: none;
-        padding: 5px 10px;
+        padding: 6px 12px;
         border: 1px solid #ddd;
         border-radius: 4px;
         color: #007bff;
+        background-color: #fff;
+        transition: all 0.2s ease;
     }
 
     .page-item.active .page-link {
@@ -91,8 +107,20 @@
         border-color: #007bff;
     }
 
-    .page-link:hover {
+    .page-item.disabled .page-link {
+        color: #aaa;
+        cursor: not-allowed;
+        background-color: #f8f9fa;
+    }
+
+    .page-link:hover:not(.disabled) {
         background-color: #e9ecef;
         border-color: #ddd;
+    }
+
+    .ellipsis {
+        border: none;
+        background: transparent;
+        cursor: default;
     }
 </style>
