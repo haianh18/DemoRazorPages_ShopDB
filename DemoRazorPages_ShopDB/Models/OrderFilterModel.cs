@@ -1,6 +1,6 @@
 namespace DemoRazorPages_ShopDB.Models
 {
-    public class FilterModel
+    public class OrderFilterModel
     {
         public int? EmployeeId { get; set; }
         public int? CustomerId { get; set; }

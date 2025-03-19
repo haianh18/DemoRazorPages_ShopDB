@@ -22,7 +22,7 @@ namespace DemoRazorPages_ShopDB.Pages.Orders
         }
 
         [BindProperty(SupportsGet = true)]
-        public FilterModel Filter { get; set; } = new FilterModel();
+        public OrderFilterModel Filter { get; set; } = new OrderFilterModel();
 
         public List<Order>? Orders { get; set; }
         public List<Employee>? Employees { get; set; }

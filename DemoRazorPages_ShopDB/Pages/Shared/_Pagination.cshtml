@@ -1,14 +1,31 @@
-﻿@model DemoRazorPages_ShopDB.Pages.Shared.PaginationModel<DemoRazorPages_ShopDB.Models.Order>
+﻿// Pages/Shared/_Pagination.cshtml
+@model DemoRazorPages_ShopDB.Pages.Shared.PaginationModel<object>
 
 @{
-    var filterParams = new
+    // Lấy các query params từ Model.Filter
+    var queryParams = new Dictionary<string, string>();
+
+    if (Model.Filter != null)
     {
-        employeeid = Model.Filter?.EmployeeId,
-        customerid = Model.Filter?.CustomerId,
-        productid = Model.Filter?.ProductId,
-        fromdate = Model.Filter?.FromDate?.ToString("yyyy-MM-dd"),
-        todate = Model.Filter?.ToDate?.ToString("yyyy-MM-dd")
-    };
+        // Dùng reflection để lấy tất cả properties và giá trị
+        var properties = Model.Filter.GetType().GetProperties();
+        foreach (var prop in properties)
+        {
+            var value = prop.GetValue(Model.Filter);
+            if (value != null)
+            {
+                // Xử lý các kiểu dữ liệu đặc biệt như DateTime
+                if (value is DateTime dateValue)
+                {
+                    queryParams[prop.Name.ToLower()] = dateValue.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    queryParams[prop.Name.ToLower()] = value.ToString();
+                }
+            }
+        }
+    }
 
     // Calculate page range to display
     int startPage = Math.Max(1, Model.PageIndex - 2);
@@ -27,15 +44,11 @@
 
 <nav aria-label="Page navigation" class="pagination-container">
     <div class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
-        <a class="page-link" asp-route-pageIndex="1" asp-route-employeeid="@filterParams.employeeid"
-           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
-           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">First</a>
+        <a class="page-link" asp-route-pageIndex="1" asp-all-route-data="queryParams">First</a>
     </div>
 
     <div class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
-        <a class="page-link" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-employeeid="@filterParams.employeeid"
-           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
-           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Previous</a>
+        <a class="page-link" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-all-route-data="queryParams">Previous</a>
     </div>
 
     @if (startPage > 1)
@@ -48,9 +61,7 @@
     @for (int i = startPage; i <= endPage; i++)
     {
         <div class="page-item @(i == Model.PageIndex ? "active" : "")">
-            <a class="page-link" asp-route-pageIndex="@i" asp-route-employeeid="@filterParams.employeeid"
-               asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
-               asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">@i</a>
+            <a class="page-link" asp-route-pageIndex="@i" asp-all-route-data="queryParams">@i</a>
         </div>
     }
 
@@ -62,15 +73,11 @@
     }
 
     <div class="page-item @(!Model.HasNextPage ? "disabled" : "")">
-        <a class="page-link" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-employeeid="@filterParams.employeeid"
-           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
-           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Next</a>
+        <a class="page-link" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-all-route-data="queryParams">Next</a>
     </div>
 
     <div class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
-        <a class="page-link" asp-route-pageIndex="@Model.TotalPages" asp-route-employeeid="@filterParams.employeeid"
-           asp-route-customerid="@filterParams.customerid" asp-route-productid="@filterParams.productid"
-           asp-route-fromdate="@filterParams.fromdate" asp-route-todate="@filterParams.todate">Last</a>
+        <a class="page-link" asp-route-pageIndex="@Model.TotalPages" asp-all-route-data="queryParams">Last</a>
     </div>
 </nav>
 
@@ -82,7 +89,7 @@
 
     .pagination-container {
         display: flex;
-        justify-content: left;
+        justify-content: center;
         align-items: center;
         margin: 20px 0;
     }

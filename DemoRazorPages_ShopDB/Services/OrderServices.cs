@@ -12,7 +12,7 @@ namespace DemoRazorPages_ShopDB.Services
             _context = context;
         }
 
-        public async Task<List<Order>?> GetAllOrderAsync(FilterModel? filter)
+        public async Task<List<Order>?> GetAllOrderAsync(OrderFilterModel? filter)
         {
             if (filter == null) return null;
             IQueryable<Order> result = _context.Orders

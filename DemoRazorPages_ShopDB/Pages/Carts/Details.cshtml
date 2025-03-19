@@ -1,0 +1,109 @@
+﻿@page
+@model DemoRazorPages_ShopDB.Pages.Carts.DetailsModel
+@{
+    ViewData["Title"] = "Chi tiết giỏ hàng";
+}
+
+<div class="container">
+    <h1>Chi tiết giỏ hàng #@Model.Cart.CartId</h1>
+    <p>Ngày tạo: @Model.Cart.CreatedDate.ToString("dd/MM/yyyy HH:mm")</p>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Thêm sản phẩm vào giỏ hàng</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="AddItem">
+                        <div class="mb-3">
+                            <label for="productId" class="form-label">Sản phẩm</label>
+                            <select id="productId" name="productId" class="form-select" required>
+                                <option value="">-- Chọn sản phẩm --</option>
+                                @foreach (var product in Model.Products)
+                                {
+                                    <option value="@product.ProductId">@product.ProductName - @product.Price.ToString("C0")</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Số lượng</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" required />
+                        </div>
+                        <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Cart.CartItems.Any())
+    {
+        <h3>Sản phẩm trong giỏ hàng</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Cart.CartItems)
+                    {
+                        <tr>
+                            <td>@item.Product.ProductName</td>
+                            <td>@item.Price.ToString("C0")</td>
+                            <td>
+                                <form method="post" asp-page-handler="UpdateQuantity" class="d-flex align-items-center">
+                                    <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                    <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+                                    <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control form-control-sm" style="width: 70px;" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary ms-2">Cập nhật</button>
+                                </form>
+                            </td>
+                            <td>@((item.Price * item.Quantity).ToString("C0"))</td>
+                            <td>
+                                <form method="post" asp-page-handler="RemoveItem">
+                                    <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                    <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end"><strong>Tổng cộng:</strong></td>
+                        <td><strong>@Model.CartTotal.ToString("C0")</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="mt-3 d-flex gap-2">
+            <form method="post" asp-page-handler="ClearCart" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng?')">
+                <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+                <button type="submit" class="btn btn-warning">Xóa tất cả sản phẩm</button>
+            </form>
+
+            <a asp-page="./Checkout" asp-route-id="@Model.Cart.CartId" class="btn btn-success">Thanh toán</a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <p>Giỏ hàng trống. Hãy thêm sản phẩm vào giỏ hàng.</p>
+        </div>
+    }
+
+    <div class="mt-3">
+        <a asp-page="./Index" class="btn btn-secondary">Quay lại danh sách giỏ hàng</a>
+    </div>
+</div>

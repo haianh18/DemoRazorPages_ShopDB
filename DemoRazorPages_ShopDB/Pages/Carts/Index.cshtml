@@ -1,0 +1,60 @@
+﻿@page
+@model DemoRazorPages_ShopDB.Pages.Carts.IndexModel
+@{
+    ViewData["Title"] = "Danh sách giỏ hàng";
+}
+
+<div class="container">
+    <h1>Danh sách giỏ hàng</h1>
+
+    <div class="mb-3">
+        <form method="post" asp-page-handler="CreateCart" class="row g-3">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Tạo giỏ hàng mới</button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model.Carts != null && Model.Carts.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ngày tạo</th>
+                        <th>Số sản phẩm</th>
+                        <th>Tổng tiền</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cart in Model.Carts)
+                    {
+                        <tr>
+                            <td>@cart.CartId</td>
+                            <td>@cart.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@cart.CartItems.Count</td>
+                            <td>@Model.CartTotals[cart.CartId].ToString("C0")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-page="./Details" asp-route-id="@cart.CartId" class="btn btn-sm btn-info">Chi tiết</a>
+                                    <form method="post" asp-page-handler="DeleteCart" onsubmit="return confirm('Bạn có chắc chắn muốn xóa giỏ hàng này?')">
+                                        <input type="hidden" name="cartId" value="@cart.CartId" />
+                                        <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <p>Chưa có giỏ hàng nào. Hãy tạo giỏ hàng mới.</p>
+        </div>
+    }
+</div>

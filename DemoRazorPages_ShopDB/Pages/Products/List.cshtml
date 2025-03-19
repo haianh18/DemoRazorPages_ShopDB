@@ -1,0 +1,109 @@
+﻿@page
+@using DemoRazorPages_ShopDB.Models
+@model DemoRazorPages_ShopDB.Pages.Products.ListModel
+
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<div style="display: flex;">
+    <div style="flex: 1; padding-right: 20px; margin-left: 20px">
+        <form method="get">
+            <h1>Filter Products</h1>
+            <div>
+                <p>Category</p>
+                <select name="categoryid">
+                    <option value="0">All Categories</option>
+                    @if (Model.Categories != null)
+                    {
+                        @foreach (Category category in Model.Categories)
+                        {
+                            <option value="@category.CategoryId" selected="@(category.CategoryId == Model.Filter.CategoryId)">
+                                @category.CategoryName
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div>
+                <p>Price Range</p>
+                <div>
+                    Min: <input type="number" name="minprice" value="@Model.Filter.MinPrice" min="0" step="0.01" />
+                </div>
+                <div>
+                    Max: <input type="number" name="maxprice" value="@Model.Filter.MaxPrice" min="0" step="0.01" />
+                </div>
+            </div>
+            <div>
+                <p>Name Search</p>
+                <input type="text" name="searchterm" value="@Model.Filter.SearchTerm" placeholder="Search by product name..." />
+            </div>
+            <div style="margin-top: 15px;">
+                <input type="submit" value="Filter" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div style="flex: 3;">
+        @if (Model != null)
+        {
+            <div>
+                <h1>Product List</h1>
+                <p>
+                    <a asp-page="./Create" class="btn btn-success">Create New Product</a>
+                </p>
+                <table border="1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Pagination.Items != null && Model.Pagination.Items.Any())
+                        {
+                            @foreach (var product in Model.Pagination.Items)
+                            {
+                                <tr>
+                                    <td>@product.ProductId</td>
+                                    <td>@product.ProductName</td>
+                                    <td>@product.Category?.CategoryName</td>
+                                    <td>@product.Price.ToString("C2")</td>
+                                    <td>@product.Quantity</td>
+                                    <td>
+                                        <a asp-page="./Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary">Edit</a>
+                                        <a asp-page="./Details" asp-route-id="@product.ProductId" class="btn btn-sm btn-info">Details</a>
+                                        <form method="post" asp-page-handler="Delete" style="display: inline;">
+                                            <input type="hidden" name="productId" value="@product.ProductId" />
+                                            <input type="hidden" name="categoryid" value="@Model.Filter.CategoryId" />
+                                            <input type="hidden" name="minprice" value="@Model.Filter.MinPrice" />
+                                            <input type="hidden" name="maxprice" value="@Model.Filter.MaxPrice" />
+                                            <input type="hidden" name="searchterm" value="@Model.Filter.SearchTerm" />
+                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this product?')">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">No products found matching your criteria.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px;">
+                <partial name="_Pagination" model="Model.Pagination" />
+            </div>
+        }
+    </div>
+</div>

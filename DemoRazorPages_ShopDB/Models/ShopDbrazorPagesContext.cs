@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 
 namespace DemoRazorPages_ShopDB.Models;
 
@@ -27,12 +27,40 @@ public partial class ShopDbrazorPagesContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<Cart> Carts { get; set; }
+    public virtual DbSet<CartItem> CartItems { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("server=localhost;database=ShopDBRazorPages;uid=sa;pwd=123456; Trusted_Connection=True; TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.ToTable("Cart");
+            entity.Property(e => e.CartId).HasColumnName("CartID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<CartItem>(entity =>
+        {
+            entity.ToTable("CartItem");
+            entity.Property(e => e.CartItemId).HasColumnName("CartItemID");
+            entity.Property(e => e.CartId).HasColumnName("CartID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
+                .HasForeignKey(d => d.CartId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__CartItem__CartID");
+
+            entity.HasOne(d => d.Product).WithMany()
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK__CartItem__ProductID");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2BF4ACE235");

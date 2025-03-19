@@ -30,6 +30,38 @@ namespace DemoRazorPages_ShopDB.Services
                 .ToListAsync();
         }
 
+        public List<Product> GetFilteredProducts(ProductFilterModel filter)
+        {
+            IQueryable<Product> query = _context.Products
+                .Include(p => p.Category);
+
+            // Apply category filter
+            if (filter?.CategoryId != null && filter.CategoryId > 0)
+            {
+                query = query.Where(p => p.CategoryId == filter.CategoryId);
+            }
+
+            // Apply price range filter
+            if (filter?.MinPrice != null)
+            {
+                query = query.Where(p => p.Price >= filter.MinPrice);
+            }
+
+            if (filter?.MaxPrice != null)
+            {
+                query = query.Where(p => p.Price <= filter.MaxPrice);
+            }
+
+            // Apply search term filter
+            if (!string.IsNullOrWhiteSpace(filter?.SearchTerm))
+            {
+                string searchTerm = filter.SearchTerm.ToLower();
+                query = query.Where(p => p.ProductName.ToLower().Contains(searchTerm));
+            }
+
+            return query.ToList();
+        }
+
         public async Task<List<Product>> GetProductsByOrderId(int OrderId)
         {
             return await _context.OrderDetails
@@ -40,7 +72,9 @@ namespace DemoRazorPages_ShopDB.Services
 
         public Product? GetProduct(int ProductId)
         {
-            return _context.Products.FirstOrDefault(p => p.ProductId == ProductId);
+            return _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.ProductId == ProductId);
         }
 
         public bool DeleteProduct(int ProductId)
@@ -48,6 +82,15 @@ namespace DemoRazorPages_ShopDB.Services
             Product? product = GetProduct(ProductId);
             if (product != null)
             {
+                // Check if product is referenced in any order details
+                bool isUsedInOrders = _context.OrderDetails.Any(od => od.ProductId == ProductId);
+
+                if (isUsedInOrders)
+                {
+                    // Product is in use, can't delete
+                    return false;
+                }
+
                 _context.Products.Remove(product);
                 _context.SaveChanges();
                 return true;
@@ -67,7 +110,6 @@ namespace DemoRazorPages_ShopDB.Services
             {
                 return false;
             }
-
         }
 
         public bool UpdateProduct(Product product)
@@ -88,9 +130,6 @@ namespace DemoRazorPages_ShopDB.Services
                 return false;
             }
             catch { return false; }
-
-
         }
-
     }
 }
