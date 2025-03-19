@@ -18,6 +18,7 @@
                     {
                         @foreach (Employee employee in Model.Employees)
                         {
+                            
                             <option value="@employee.EmployeeId" selected="@(employee.EmployeeId == Model.Filter.EmployeeId)">
                                 @employee.EmployeeName
                             </option>

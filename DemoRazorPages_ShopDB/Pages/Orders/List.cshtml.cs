@@ -50,7 +50,8 @@ namespace DemoRazorPages_ShopDB.Pages.Orders
                 {
                     PageIndex = currentPageIndex,
                     TotalPages = (int)Math.Ceiling(totalOrders / (double)pageSize),
-                    Items = orders
+                    Items = orders,
+                    Filter = Filter
                 };
             }
         }

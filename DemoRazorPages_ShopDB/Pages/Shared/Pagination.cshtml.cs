@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+using DemoRazorPages_ShopDB.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DemoRazorPages_ShopDB.Pages.Shared
@@ -11,5 +11,7 @@ namespace DemoRazorPages_ShopDB.Pages.Shared
 
         public bool HasPreviousPage => PageIndex > 1;
         public bool HasNextPage => PageIndex < TotalPages;
+        public FilterModel Filter { get; set; }
+
     }
 }
