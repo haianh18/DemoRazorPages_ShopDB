@@ -1,4 +1,6 @@
-﻿using DemoRazorPages_ShopDB.Models;
+﻿using DemoRazorPages_ShopDB.Hubs;
+using DemoRazorPages_ShopDB.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DemoRazorPages_ShopDB.Services
@@ -8,11 +10,16 @@ namespace DemoRazorPages_ShopDB.Services
     {
         private readonly ShopDbrazorPagesContext _context;
         private readonly ProductServices _productServices;
+        private readonly IHubContext<ProductStockHub> _hubContext;
 
-        public CartServices(ShopDbrazorPagesContext context, ProductServices productServices)
+        public CartServices(
+            ShopDbrazorPagesContext context,
+            ProductServices productServices,
+            IHubContext<ProductStockHub> hubContext)
         {
             _context = context;
             _productServices = productServices;
+            _hubContext = hubContext;
         }
 
         // Get all carts with their items and related products
@@ -182,7 +189,7 @@ namespace DemoRazorPages_ShopDB.Services
                 .SumAsync(ci => ci.Price * ci.Quantity);
         }
 
-        // Convert cart to order
+        // Convert cart to order and handle out-of-stock products
         public async Task<Order> ConvertCartToOrderAsync(int cartId, int customerId, int employeeId, string? orderNote = null)
         {
             var cart = await GetCartByIdAsync(cartId);
@@ -204,6 +211,9 @@ namespace DemoRazorPages_ShopDB.Services
                     OrderNote = orderNote,
                     OrderDetails = new List<OrderDetail>()
                 };
+
+                // Tracking for products that will be out of stock
+                var productUpdates = new List<(int ProductId, string ProductName, int NewQuantity)>();
 
                 // Add order details from cart items
                 foreach (var item in cart.CartItems)
@@ -229,8 +239,12 @@ namespace DemoRazorPages_ShopDB.Services
                     });
 
                     // Update product quantity
-                    product.Quantity -= item.Quantity;
+                    int newQuantity = product.Quantity - item.Quantity;
+                    product.Quantity = newQuantity;
                     _context.Products.Update(product);
+
+                    // Track product updates
+                    productUpdates.Add((product.ProductId, product.ProductName, newQuantity));
                 }
 
                 // Save order
@@ -241,12 +255,69 @@ namespace DemoRazorPages_ShopDB.Services
                 await ClearCartAsync(cartId);
 
                 await transaction.CommitAsync();
+
+                // After successful transaction, handle out-of-stock notifications
+                // and clean up other carts
+                await ProcessOutOfStockProducts(productUpdates);
+
                 return order;
             }
             catch
             {
                 await transaction.RollbackAsync();
                 throw;
+            }
+        }
+
+        // Process out of stock products and clean up other carts
+        private async Task ProcessOutOfStockProducts(List<(int ProductId, string ProductName, int NewQuantity)> productUpdates)
+        {
+            // Filter products that are now out of stock
+            var outOfStockProducts = productUpdates
+                .Where(p => p.NewQuantity == 0)
+                .ToList();
+
+            if (!outOfStockProducts.Any())
+                return;
+
+            // Find cart items in OTHER carts containing these out-of-stock products
+            var cartItemsToRemove = new List<CartItem>();
+
+            foreach (var product in outOfStockProducts)
+            {
+                var items = await _context.CartItems
+                    .Where(ci => ci.ProductId == product.ProductId)
+                    .ToListAsync();
+
+                cartItemsToRemove.AddRange(items);
+
+                Console.WriteLine($"Sending out-of-stock notification for product: {product.ProductName} (ID: {product.ProductId})");
+
+
+                // Send notification for out of stock product
+                await _hubContext.Clients.All.SendAsync("ProductOutOfStock", product.ProductId, product.ProductName);
+            }
+
+            if (cartItemsToRemove.Any())
+            {
+                // Remove these items from carts
+                _context.CartItems.RemoveRange(cartItemsToRemove);
+                await _context.SaveChangesAsync();
+
+                // Send notifications about cart items removal
+                foreach (var product in outOfStockProducts)
+                {
+                    await _hubContext.Clients.All.SendAsync("RemoveProductFromCart", product.ProductId, product.ProductName);
+                }
+            }
+
+            // Also notify about quantity changes for all updated products
+            foreach (var product in productUpdates)
+            {
+                if (product.NewQuantity > 0)
+                {
+                    await _hubContext.Clients.All.SendAsync("ProductQuantityChanged", product.ProductId, product.NewQuantity);
+                }
             }
         }
     }

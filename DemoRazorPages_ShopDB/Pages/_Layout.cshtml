@@ -253,6 +253,17 @@
             padding: 0.35em 0.65em;
             border-radius: 0.25rem;
         }
+
+        /* Toast container */
+        #toast-container {
+            z-index: 9999;
+        }
+
+        /* Animation for removed cart items */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -284,6 +295,15 @@
                             </a>
                         </li>
                     </ul>
+                    <div class="d-flex align-items-center">
+                        <div class="connection-status ms-2">
+                            <span id="connection-indicator" class="badge bg-secondary" title="Trạng thái kết nối">
+                                <i class="bi bi-wifi"></i>
+                                <span id="connection-text">Đang kết nối...</span>
+                            </span>
+                        </div>
+                    </div>
+                    <button id="testSignalR" class="btn btn-warning">Test SignalR Notification</button>
                 </div>
             </div>
         </nav>
@@ -294,6 +314,12 @@
             @RenderBody()
         </main>
     </div>
+
+    <!-- Toast container for notifications -->
+    <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <!-- Real-time notification center -->
+    <partial name="_NotificationPartial" />
 
     <footer class="footer">
         <div class="container text-center text-md-start">
@@ -313,7 +339,12 @@
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SignalR Client Library -->
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+
+    <!-- Custom SignalR Script -->
+    <script src="~/js/productStock.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
@@ -336,5 +367,15 @@
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    @section Scripts {
+        <script>
+            document.getElementById('testSignalR').addEventListener('click', function() {
+                // Tạo một toast notification trực tiếp
+                showNotification("Thông báo thử nghiệm",
+                    "Đây là thông báo kiểm tra SignalR", "warning");
+            });
+        </script>
+    }
 </body>
 </html>
+

@@ -1,0 +1,102 @@
+﻿@* 
+    Real-time notification partial view
+*@
+
+<div id="notification-center" class="position-fixed end-0 p-3" style="z-index: 9999; top: 60px; max-width: 350px;">
+    <!-- Notifications will be dynamically added here via SignalR -->
+</div>
+
+<script>
+    // Notification Center
+    let notificationCount = 0;
+    const MAX_NOTIFICATIONS = 5;
+
+    // Function to create a new notification
+    function createNotification(title, message, type = 'info') {
+        const id = `notification-${notificationCount++}`;
+        const notification = document.createElement('div');
+        notification.id = id;
+        notification.className = `toast align-items-center text-white bg-${type} border-0 mb-2`;
+        notification.setAttribute('role', 'alert');
+        notification.setAttribute('aria-live', 'assertive');
+        notification.setAttribute('aria-atomic', 'true');
+
+        notification.innerHTML = `
+            <div class="toast-header bg-${type} text-white">
+                <strong class="me-auto">${title}</strong>
+                <small class="text-white-50">${new Date().toLocaleTimeString()}</small>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>
+        `;
+
+        return notification;
+    }
+
+    // Function to show a notification
+    function showNotification(title, message, type = 'info') {
+        const notificationCenter = document.getElementById('notification-center');
+        const notification = createNotification(title, message, type);
+
+        // Limit the number of notifications
+        if (notificationCenter.children.length >= MAX_NOTIFICATIONS) {
+            notificationCenter.removeChild(notificationCenter.firstChild);
+        }
+
+        notificationCenter.appendChild(notification);
+
+        // Initialize and show the toast
+        const bsToast = new bootstrap.Toast(notification, {
+            animation: true,
+            autohide: true,
+            delay: 5000
+        });
+
+        bsToast.show();
+
+        // Remove notification when hidden
+        notification.addEventListener('hidden.bs.toast', () => {
+            notification.remove();
+        });
+    }
+
+    // Listen for SignalR events to show notifications
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if SignalR connection is available
+        if (typeof connection !== 'undefined') {
+            // Product out of stock notification
+            connection.on("ProductOutOfStock", (productId, productName) => {
+                showNotification(
+                    "Sản phẩm hết hàng",
+                    `Sản phẩm "${productName}" đã hết hàng.`,
+                    "warning"
+                );
+            });
+
+            // Product removed from cart notification
+            connection.on("RemoveProductFromCart", (productId, productName) => {
+                // Only show this notification on cart pages
+                if (window.location.pathname.includes("/Carts/")) {
+                    showNotification(
+                        "Sản phẩm đã được xóa",
+                        `Sản phẩm "${productName}" đã hết hàng và đã bị xóa khỏi giỏ hàng.`,
+                        "danger"
+                    );
+                }
+            });
+
+            // Product quantity changed notification
+            connection.on("ProductQuantityChanged", (productId, newQuantity) => {
+                if (newQuantity <= 5 && newQuantity > 0) {
+                    showNotification(
+                        "Sản phẩm sắp hết",
+                        `Một sản phẩm hiện chỉ còn ${newQuantity} trong kho.`,
+                        "info"
+                    );
+                }
+            });
+        }
+    });
+</script>

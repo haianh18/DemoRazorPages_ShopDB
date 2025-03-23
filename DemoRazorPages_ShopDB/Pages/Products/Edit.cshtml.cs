@@ -38,7 +38,7 @@ namespace DemoRazorPages_ShopDB.Pages.Products
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -77,7 +77,8 @@ namespace DemoRazorPages_ShopDB.Pages.Products
                 }
             }
 
-            bool success = _productServices.UpdateProduct(Product);
+            // Sử dụng phương thức async mới với SignalR
+            bool success = await _productServices.UpdateProductAsync(Product);
 
             if (success)
             {

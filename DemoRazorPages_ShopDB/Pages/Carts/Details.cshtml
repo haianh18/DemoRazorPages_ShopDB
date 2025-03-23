@@ -49,11 +49,11 @@
                 </div>
                 <div>
                     <div class="text-muted">Tổng số lượng sản phẩm:</div>
-                    <div class="fs-4 fw-bold">@Model.Cart.CartItems.Sum(ci => ci.Quantity)</div>
+                    <div class="fs-4 fw-bold total-items">@Model.Cart.CartItems.Sum(ci => ci.Quantity)</div>
                 </div>
                 <div>
                     <div class="text-muted">Tổng tiền:</div>
-                    <div class="fs-4 fw-bold text-success">@Model.CartTotal.ToString("C0")</div>
+                    <div class="fs-4 fw-bold text-success total-amount">@Model.CartTotal.ToString("C0")</div>
                 </div>
             </div>
 
@@ -102,7 +102,7 @@
                         <tbody>
                             @foreach (var item in Model.Cart.CartItems)
                             {
-                                <tr>
+                                <tr data-product-id="@item.ProductId" class="cart-item">
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div>
@@ -116,7 +116,7 @@
                                         <form method="post" asp-page-handler="UpdateQuantity" class="d-flex align-items-center">
                                             <input type="hidden" name="cartItemId" value="@item.CartItemId" />
                                             <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
-                                            <input type="number" name="quantity" value="@item.Quantity" min="1"
+                                            <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Product.Quantity"
                                                    class="form-control form-control-sm" style="width: 70px;" />
                                             <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
                                                 <i class="bi bi-arrow-repeat"></i>
@@ -139,7 +139,7 @@
                         <tfoot>
                             <tr>
                                 <td colspan="3" class="text-end"><strong>Tổng cộng:</strong></td>
-                                <td class="fw-bold fs-5 text-success">@Model.CartTotal.ToString("C0")</td>
+                                <td class="fw-bold fs-5 text-success total-amount">@Model.CartTotal.ToString("C0")</td>
                                 <td></td>
                             </tr>
                         </tfoot>

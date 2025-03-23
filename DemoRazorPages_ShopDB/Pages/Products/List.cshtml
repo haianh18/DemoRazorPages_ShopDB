@@ -138,7 +138,7 @@
                                     {
                                         bool isOutOfStock = product.Quantity <= 0;
 
-                                        <tr class="@(isOutOfStock ? "text-muted bg-light" : "")">
+                                        <tr class="@(isOutOfStock ? "text-muted bg-light" : "")" data-product-id="@product.ProductId">
                                             <td>@product.ProductId</td>
                                             <td>
                                                 @product.ProductName
