@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DemoRazorPages_ShopDB.Services
 {
+    // Lớp dịch vụ xử lý giỏ hàng
     public class CartServices
     {
         private readonly ShopDbrazorPagesContext _context;
@@ -67,25 +68,22 @@ namespace DemoRazorPages_ShopDB.Services
                 throw new ArgumentException("Không tìm thấy sản phẩm");
             }
 
-            if (product.Quantity < quantity)
-            {
-                throw new ArgumentException($"Số lượng sản phẩm trong kho không đủ (Có: {product.Quantity})");
-            }
-
             // Check if product already exists in cart
             var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+            // Calculate the new quantity that would be in the cart
+            int newQuantity = (existingItem != null) ? existingItem.Quantity + quantity : quantity;
+
+            // Check if total quantity exceeds available stock
+            if (newQuantity > product.Quantity)
+            {
+                throw new ArgumentException($"Không thể thêm {quantity} sản phẩm vào giỏ hàng. Tổng số lượng ({newQuantity}) sẽ vượt quá số lượng tồn kho ({product.Quantity}).");
+            }
 
             if (existingItem != null)
             {
                 // Update quantity if product exists
-                existingItem.Quantity += quantity;
-
-                // Check if updated quantity exceeds available stock
-                if (existingItem.Quantity > product.Quantity)
-                {
-                    throw new ArgumentException($"Tổng số lượng trong giỏ vượt quá số lượng có sẵn (Có: {product.Quantity})");
-                }
-
+                existingItem.Quantity = newQuantity;
                 _context.CartItems.Update(existingItem);
                 await _context.SaveChangesAsync();
                 return existingItem;
@@ -129,7 +127,7 @@ namespace DemoRazorPages_ShopDB.Services
                 // Validate quantity against available stock
                 if (quantity > cartItem.Product.Quantity)
                 {
-                    throw new ArgumentException($"Số lượng yêu cầu vượt quá số lượng có sẵn (Có: {cartItem.Product.Quantity})");
+                    throw new ArgumentException($"Số lượng yêu cầu ({quantity}) vượt quá số lượng có sẵn ({cartItem.Product.Quantity})");
                 }
 
                 cartItem.Quantity = quantity;

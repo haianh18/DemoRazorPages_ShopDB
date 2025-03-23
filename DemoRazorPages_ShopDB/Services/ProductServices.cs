@@ -32,31 +32,24 @@ namespace DemoRazorPages_ShopDB.Services
 
         public List<Product> GetFilteredProducts(ProductFilterModel filter)
         {
-            IQueryable<Product> query = _context.Products
-                .Include(p => p.Category);
+            IQueryable<Product> query = _context.Products.Include(p => p.Category);
 
-            // Apply category filter
-            if (filter?.CategoryId != null && filter.CategoryId > 0)
+            if (filter != null)
             {
-                query = query.Where(p => p.CategoryId == filter.CategoryId);
-            }
+                if (filter.CategoryId > 0)
+                    query = query.Where(p => p.CategoryId == filter.CategoryId);
 
-            // Apply price range filter
-            if (filter?.MinPrice != null)
-            {
-                query = query.Where(p => p.Price >= filter.MinPrice);
-            }
+                if (filter.MinPrice != null)
+                    query = query.Where(p => p.Price >= filter.MinPrice);
 
-            if (filter?.MaxPrice != null)
-            {
-                query = query.Where(p => p.Price <= filter.MaxPrice);
-            }
+                if (filter.MaxPrice != null)
+                    query = query.Where(p => p.Price <= filter.MaxPrice);
 
-            // Apply search term filter
-            if (!string.IsNullOrWhiteSpace(filter?.SearchTerm))
-            {
-                string searchTerm = filter.SearchTerm.ToLower();
-                query = query.Where(p => p.ProductName.ToLower().Contains(searchTerm));
+                if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+                {
+                    string searchTerm = filter.SearchTerm.ToLower();
+                    query = query.Where(p => p.ProductName.ToLower().Contains(searchTerm));
+                }
             }
 
             return query.ToList();

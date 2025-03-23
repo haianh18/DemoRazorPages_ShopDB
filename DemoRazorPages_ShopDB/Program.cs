@@ -26,7 +26,7 @@ namespace DemoRazorPages_ShopDB
             app.MapRazorPages();
             app.MapGet("/", context =>
             {
-                context.Response.Redirect("/Orders/List");
+                context.Response.Redirect("/Products/List");
                 return Task.CompletedTask;
             });
 

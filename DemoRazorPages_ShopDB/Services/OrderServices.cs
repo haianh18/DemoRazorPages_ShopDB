@@ -22,7 +22,8 @@ namespace DemoRazorPages_ShopDB.Services
             if (filter?.EmployeeId != null && filter.EmployeeId != 0) result = result.Where(o => o.EmployeeId == filter.EmployeeId);
             if (filter?.CustomerId != null && filter.CustomerId != 0) result = result.Where(o => o.CustomerId.Equals(filter.CustomerId));
             if (filter?.ProductId != null) result = result.Where(o => o.OrderDetails.Any(d => d.ProductId == filter.ProductId));
-            if (filter?.FromDate != null && filter?.ToDate != null) result = result.Where(o => o.OrderDate >= filter.FromDate && o.OrderDate <= filter.ToDate);
+            if (filter?.FromDate != null) result = result.Where(o => o.OrderDate >= filter.FromDate);
+            if (filter?.ToDate != null) result = result.Where(o => o.OrderDate <= filter.ToDate);
             return await result.ToListAsync();
         }
 
