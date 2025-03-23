@@ -267,10 +267,6 @@
             transition: opacity 1s ease-out;
         }
 
-        /* Tùy chỉnh Toastr */
-        .toast-container {
-            z-index: 9999;
-        }
 
         .toast-success {
             background-color: #28a745 !important;
@@ -319,17 +315,6 @@
                             </a>
                         </li>
                     </ul>
-                    <div class="d-flex align-items-center">
-                        <div class="connection-status me-2">
-                            <span id="connection-indicator" class="badge bg-secondary" title="Trạng thái kết nối">
-                                <i class="bi bi-wifi"></i>
-                                <span id="connection-text">Đang kết nối...</span>
-                            </span>
-                        </div>
-                        <button id="testSignalR" class="btn btn-warning btn-sm">
-                            <i class="bi bi-broadcast"></i> Test SignalR
-                        </button>
-                    </div>
                 </div>
             </div>
         </nav>
@@ -341,11 +326,7 @@
         </main>
     </div>
 
-    <!-- Toast container for notifications -->
-    <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
-
-    <!-- Real-time notification center -->
-    <partial name="_NotificationPartial" />
+    
 
     <footer class="footer">
         <div class="container text-center text-md-start">
@@ -390,15 +371,6 @@
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
-    @section Scripts {
-        <script>
-            document.getElementById('testSignalR').addEventListener('click', function() {
-                // Tạo một toast notification trực tiếp
-                showNotification("Thông báo thử nghiệm",
-                    "Đây là thông báo kiểm tra SignalR", "warning");
-            });
-        </script>
-    }
 </body>
 </html>
 

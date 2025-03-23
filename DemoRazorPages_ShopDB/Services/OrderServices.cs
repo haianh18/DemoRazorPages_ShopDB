@@ -1,4 +1,6 @@
-﻿using DemoRazorPages_ShopDB.Models;
+﻿using DemoRazorPages_ShopDB.Hubs;
+using DemoRazorPages_ShopDB.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DemoRazorPages_ShopDB.Services
@@ -6,10 +8,11 @@ namespace DemoRazorPages_ShopDB.Services
     public class OrderServices
     {
         ShopDbrazorPagesContext _context;
-
-        public OrderServices(ShopDbrazorPagesContext context)
+        IHubContext<ProductStockHub> _hubContext;
+        public OrderServices(ShopDbrazorPagesContext context, IHubContext<ProductStockHub> hubcontext)
         {
             _context = context;
+            _hubContext = hubcontext;
         }
 
         public async Task<List<Order>?> GetAllOrderAsync(OrderFilterModel? filter)
@@ -37,14 +40,23 @@ namespace DemoRazorPages_ShopDB.Services
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
-        public async Task<bool> Delete(int OrderId)
+        public async Task<bool> Delete(int orderId)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == OrderId);
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId);
             if (order == null) return false;
-            var details = _context.OrderDetails.Where(o => o.OrderId == OrderId);
+
+            var details = _context.OrderDetails.Where(o => o.OrderId == orderId);
             if (details.Any()) _context.OrderDetails.RemoveRange(details);
+
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
+
+            // Notify other clients about order deletion
+            if (_hubContext != null)
+            {
+                await _hubContext.Clients.All.SendAsync("OrderDeleted", orderId);
+            }
+
             return true;
         }
 

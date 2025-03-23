@@ -19,14 +19,25 @@ namespace DemoRazorPages_ShopDB.Hubs
             await Clients.Others.SendAsync("RemoveProductFromCart", productId, productName);
         }
 
-        // Ghi log khi có kết nối mới
+        // New notification method for cart deletion
+        public async Task NotifyCartDeleted(int cartId)
+        {
+            await Clients.Others.SendAsync("CartDeleted", cartId);
+        }
+
+        // New notification method for order deletion
+        public async Task NotifyOrderDeleted(int orderId)
+        {
+            await Clients.Others.SendAsync("OrderDeleted", orderId);
+        }
+
+        // Connection logging
         public override async Task OnConnectedAsync()
         {
             Console.WriteLine($"SignalR Connection: {Context.ConnectionId} connected.");
             await base.OnConnectedAsync();
         }
 
-        // Ghi log khi ngắt kết nối
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             Console.WriteLine($"SignalR Connection: {Context.ConnectionId} disconnected.");
@@ -35,16 +46,6 @@ namespace DemoRazorPages_ShopDB.Hubs
                 Console.WriteLine($"Disconnection error: {exception.Message}");
             }
             await base.OnDisconnectedAsync(exception);
-        }
-
-        // Phương thức kiểm tra kết nối
-        public async Task TestSignalRConnection(string message)
-        {
-            Console.WriteLine($"Test message received: {message}");
-
-            // Gửi phản hồi tới tất cả client
-            await Clients.All.SendAsync("TestConnectionMessage",
-                $"Server received: {message} at {DateTime.Now}");
         }
     }
 }

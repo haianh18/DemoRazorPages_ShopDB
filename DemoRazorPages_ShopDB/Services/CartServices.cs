@@ -178,6 +178,9 @@ namespace DemoRazorPages_ShopDB.Services
                 _context.CartItems.RemoveRange(cart.CartItems);
                 _context.Carts.Remove(cart);
                 await _context.SaveChangesAsync();
+
+                // Notify other clients about cart deletion
+                await _hubContext.Clients.All.SendAsync("CartDeleted", cartId);
             }
         }
 
@@ -253,7 +256,7 @@ namespace DemoRazorPages_ShopDB.Services
 
                 // Clear the cart after successful order creation
                 await ClearCartAsync(cartId);
-
+                await DeleteCartAsync(cartId);
                 await transaction.CommitAsync();
 
                 // After successful transaction, handle out-of-stock notifications
