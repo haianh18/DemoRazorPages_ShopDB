@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         :root {
@@ -264,6 +266,28 @@
             opacity: 0;
             transition: opacity 1s ease-out;
         }
+
+        /* Tùy chỉnh Toastr */
+        .toast-container {
+            z-index: 9999;
+        }
+
+        .toast-success {
+            background-color: #28a745 !important;
+        }
+
+        .toast-error {
+            background-color: #dc3545 !important;
+        }
+
+        .toast-warning {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+        }
+
+        .toast-info {
+            background-color: #17a2b8 !important;
+        }
     </style>
 </head>
 <body>
@@ -296,14 +320,16 @@
                         </li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <div class="connection-status ms-2">
+                        <div class="connection-status me-2">
                             <span id="connection-indicator" class="badge bg-secondary" title="Trạng thái kết nối">
                                 <i class="bi bi-wifi"></i>
                                 <span id="connection-text">Đang kết nối...</span>
                             </span>
                         </div>
+                        <button id="testSignalR" class="btn btn-warning btn-sm">
+                            <i class="bi bi-broadcast"></i> Test SignalR
+                        </button>
                     </div>
-                    <button id="testSignalR" class="btn btn-warning">Test SignalR Notification</button>
                 </div>
             </div>
         </nav>
@@ -340,12 +366,9 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- SignalR Client Library -->
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
-
-    <!-- Custom SignalR Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/productStock.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
         // Initialize tooltips
