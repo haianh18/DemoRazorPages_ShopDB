@@ -129,6 +129,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             );
         });
+
+        // Product Price changed notification
+        connection.on("ProductPriceChanged", (productId) => {
+            toastr.info(
+                `Giá của sản phẩm có ID: ${productId} đã thay. Trang sẽ được làm mới`,
+                "Giá sản phẩm đã thay đổi",
+                {
+                    timeOut: 3000,
+                    onHidden: function () {
+                        location.reload();
+                    }
+                }
+            );
+        });
     }
 });
 

@@ -124,6 +124,7 @@ namespace DemoRazorPages_ShopDB.Services
 
                     // Store original values for comparison
                     int originalQuantity = existingProduct.Quantity;
+                    decimal originalPrice = existingProduct.Price;
 
                     // Update the product
                     existingProduct.ProductName = product.ProductName;
@@ -153,6 +154,12 @@ namespace DemoRazorPages_ShopDB.Services
                             await _hubContext.Clients.All.SendAsync("ProductQuantityChanged",
                                 product.ProductId, product.Quantity);
                         }
+                    }
+
+                    if (originalPrice != product.Price)
+                    {
+                        await _hubContext.Clients.All.SendAsync("ProductPriceChanged",
+                            product.ProductId);
                     }
 
                     return true;

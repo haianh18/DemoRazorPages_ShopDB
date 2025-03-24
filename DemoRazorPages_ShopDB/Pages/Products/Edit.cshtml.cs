@@ -2,7 +2,6 @@ using DemoRazorPages_ShopDB.Models;
 using DemoRazorPages_ShopDB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace DemoRazorPages_ShopDB.Pages.Products
 {
