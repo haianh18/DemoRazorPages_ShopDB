@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     timeOut: 5000,
                     onHidden: function () {
                         // Reload the page to update product status
-                        window.location.reload();
+                        location.reload();
                     }
                 }
             );
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         timeOut: 3000,
                         onHidden: function () {
                             // Reload the page to update cart contents
-                            window.location.reload();
+                            location.reload();
                         }
                     }
                 );
@@ -86,18 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     `Sản phẩm có ID: ${productId} chỉ còn ${newQuantity} trong kho.`,
                     "Sản phẩm sắp hết hàng",
                     {
-                        timeOut: 5000
+                        timeOut: 3000,
+                        onHidden: function () {
+                            location.reload();
+                        }
                     }
                 );
-
-                // Update quantity indicators on the page if the product is displayed
-                const productElements = document.querySelectorAll(`[data-product-id="${productId}"]`);
-                if (productElements.length > 0) {
-                    // Add a small delay before reloading to ensure the notification is seen
-                    setTimeout(() => {
-                        location.reload();
-                    }, 3000);
-                }
+            } else {
+                toastr.info(
+                    "Số lượng sản phẩm đã thay đổi. Trang sẽ được làm mới.", "Số lượng sản phẩm đã thay đổi",
+                    {
+                        timeOut: 3000,
+                        onHidden: function () {
+                            location.reload();
+                        }
+                    }
+                );
             }
         });
 
@@ -131,10 +135,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Product Price changed notification
-        connection.on("ProductPriceChanged", (productId) => {
+        connection.on("ProductPriceChanged", (productId, newPrice, oldPrice) => {
+            console.log("ProductPriceChanged");
+            const formattedNewPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newPrice);
+            const formattedOldPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(oldPrice);
+
             toastr.info(
-                `Giá của sản phẩm có ID: ${productId} đã thay. Trang sẽ được làm mới`,
+                `Giá của sản phẩm có ID: ${productId} đã thay đổi từ ${formattedOldPrice} thành ${formattedNewPrice}. Trang sẽ được làm mới.`,
                 "Giá sản phẩm đã thay đổi",
+                {
+                    timeOut: 3000,
+                    onHidden: function () {
+                        location.reload();
+                    }
+                }
+            );
+        });
+
+        // Product Name changed notification
+        connection.on("ProductNameChanged", (productId, newName, oldName) => {
+            toastr.info(
+                `Tên sản phẩm có ID: ${productId} đã thay đổi từ "${oldName}" thành "${newName}". Trang sẽ được làm mới.`,
+                "Tên sản phẩm đã thay đổi",
                 {
                     timeOut: 3000,
                     onHidden: function () {

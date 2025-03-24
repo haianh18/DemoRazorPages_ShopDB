@@ -31,10 +31,16 @@ namespace DemoRazorPages_ShopDB.Hubs
             await Clients.Others.SendAsync("OrderDeleted", orderId);
         }
 
-        //New notification method for product price update
-        public async Task NotifyProductPriceChanged(int productId)
+        //Update notification method for product price change with more details
+        public async Task NotifyProductPriceChanged(int productId, decimal newPrice, decimal oldPrice)
         {
-            await Clients.Others.SendAsync("ProductPriceChanged", productId);
+            await Clients.Others.SendAsync("ProductPriceChanged", productId, newPrice, oldPrice);
+        }
+
+        //New notification method for product name change
+        public async Task NotifyProductNameChanged(int productId, string newName, string oldName)
+        {
+            await Clients.Others.SendAsync("ProductNameChanged", productId, newName, oldName);
         }
 
         // Connection logging

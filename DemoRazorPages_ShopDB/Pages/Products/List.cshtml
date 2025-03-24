@@ -162,9 +162,9 @@
 
                                                     @if (!isOutOfStock)
                                                     {
-                                                        <a asp-page="./Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary">
+                                                        @* <a asp-page="./Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary">
                                                             <i class="bi bi-pencil"></i> Sửa
-                                                        </a>
+                                                        </a> *@
                                                         @*
                                                         <form method="post" asp-page-handler="Delete" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                                             <input type="hidden" name="productId" value="@product.ProductId" />
@@ -198,9 +198,9 @@
                                                     }
                                                     else
                                                     {
-                                                        <a asp-page="./Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary">
+                                                        @* <a asp-page="./Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary">
                                                             <i class="bi bi-pencil"></i> Sửa
-                                                        </a>
+                                                        </a> *@
                                                         @*
                                                         <button type="button" class="btn btn-sm btn-secondary" disabled>
                                                             <i class="bi bi-trash"></i> Xóa

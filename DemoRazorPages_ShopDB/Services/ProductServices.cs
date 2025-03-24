@@ -125,6 +125,7 @@ namespace DemoRazorPages_ShopDB.Services
                     // Store original values for comparison
                     int originalQuantity = existingProduct.Quantity;
                     decimal originalPrice = existingProduct.Price;
+                    string originalName = existingProduct.ProductName;
 
                     // Update the product
                     existingProduct.ProductName = product.ProductName;
@@ -135,7 +136,7 @@ namespace DemoRazorPages_ShopDB.Services
                     await _context.SaveChangesAsync();
 
                     // Handle notifications if product quantity changed
-                    if (originalQuantity != product.Quantity)
+                    if (originalQuantity != existingProduct.Quantity)
                     {
                         // If product went from in-stock to out-of-stock
                         if (wasInStock && willBeOutOfStock)
@@ -147,7 +148,6 @@ namespace DemoRazorPages_ShopDB.Services
                             // Remove this product from all carts
                             await RemoveProductFromAllCartsAsync(product.ProductId, product.ProductName);
                         }
-
                         // Otherwise just notify about quantity change
                         else
                         {
@@ -156,10 +156,17 @@ namespace DemoRazorPages_ShopDB.Services
                         }
                     }
 
-                    if (originalPrice != product.Price)
-                    {
+                    // Notify about price change
+                    if (originalPrice != existingProduct.Price)
                         await _hubContext.Clients.All.SendAsync("ProductPriceChanged",
-                            product.ProductId);
+                        product.ProductId, product.Price, originalPrice);
+
+
+                    // Notify about name change
+                    if (originalName != existingProduct.ProductName)
+                    {
+                        await _hubContext.Clients.All.SendAsync("ProductNameChanged",
+                            product.ProductId, product.ProductName, originalName);
                     }
 
                     return true;
